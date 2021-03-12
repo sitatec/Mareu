@@ -2,4 +2,5 @@
     <string name="app_name">Mareu</string>
     <string name="delete_meeting_content_description">Delete Meeting</string>
     <string name="create_new_meeting_content_description">Create new meeting</string>
+    <string name="filter_meetings_action_title">Filter meetings</string>
 </resources>
