@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/meeting_color"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        app:cardCornerRadius="50dp"
+        android:layout_margin="10dp"
+        app:cardBackgroundColor="@color/red"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/title_container"
+        app:layout_constraintLeft_toLeftOf="parent"/>
+
+    <LinearLayout
+        android:id="@+id/title_container"
+        android:orientation="vertical"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="1dp"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintLeft_toRightOf="@id/meeting_color"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/delete_meeting">
+
+        <TextView
+            android:id="@+id/meeting_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="21sp"
+            android:textStyle="bold"
+            android:textColor="?attr/colorOnSecondary"
+            tools:text="Réunion A - 14h - Peach"/>
+
+        <TextView
+            android:id="@+id/meeting_subtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:maxLines="1"
+            android:ellipsize="end"
+            tools:text="maxime@lamzone.com, alex@lamzone.com"/>
+
+    </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/delete_meeting"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_delete_32"
+        app:layout_constraintHorizontal_weight="1"
+        android:backgroundTint="@android:color/transparent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
