@@ -8,12 +8,11 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/meeting_color"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        app:cardCornerRadius="50dp"
-        android:layout_margin="10dp"
+        android:layout_width="@dimen/meeting_color_view_size"
+        android:layout_height="@dimen/meeting_color_view_size"
+        app:cardCornerRadius="@dimen/meeting_color_view_size"
+        android:layout_margin="@dimen/meeting_color_view_margin"
         app:cardBackgroundColor="@color/red"
-        app:layout_constraintHorizontal_weight="1"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toLeftOf="@id/title_container"
@@ -24,8 +23,7 @@
         android:orientation="vertical"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="1dp"
-        app:layout_constraintHorizontal_weight="1"
+        android:layout_marginStart="1dp"
         app:layout_constraintLeft_toRightOf="@id/meeting_color"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -35,7 +33,7 @@
             android:id="@+id/meeting_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="21sp"
+            android:textSize="@dimen/meeting_title_text_size"
             android:textStyle="bold"
             android:textColor="?attr/colorOnSecondary"
             tools:text="Réunion A - 14h - Peach"/>
@@ -44,7 +42,7 @@
             android:id="@+id/meeting_subtitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="16sp"
+            android:textSize="@dimen/meeting_subtitle_text_size"
             android:maxLines="1"
             android:ellipsize="end"
             tools:text="maxime@lamzone.com, alex@lamzone.com"/>
@@ -56,10 +54,10 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_delete_32"
-        app:layout_constraintHorizontal_weight="1"
         android:backgroundTint="@android:color/transparent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="parent"/>
+        app:layout_constraintRight_toRightOf="parent"
+        android:contentDescription="@string/delete_meeting_content_description" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
