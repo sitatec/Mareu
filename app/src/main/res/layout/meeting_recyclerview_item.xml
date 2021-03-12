@@ -35,7 +35,7 @@
             android:layout_height="wrap_content"
             android:textSize="@dimen/meeting_title_text_size"
             android:textStyle="bold"
-            android:textColor="?attr/colorOnSecondary"
+            android:textColor="?attr/titleTextColor"
             tools:text="Réunion A - 14h - Peach"/>
 
         <TextView

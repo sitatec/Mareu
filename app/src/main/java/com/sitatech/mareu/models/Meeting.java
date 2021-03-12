@@ -71,4 +71,12 @@ public class Meeting {
     public void setColor(int color) {
         this.color = color;
     }
+
+    public String getTitle(){
+        return "";//TODO test
+    }
+
+    public String getSubtitle(){
+        return "";//TODO test
+    }
 }
