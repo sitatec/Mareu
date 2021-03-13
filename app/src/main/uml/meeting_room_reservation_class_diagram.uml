@@ -1,0 +1,35 @@
+@startuml
+
+package MeetingRoomReservation {
+
+    class MeetingRoom {
+        hasFreeSlot() : Boolean
+        isAvailable( from : Time, to : Time ) : Boolean
+        reserves( meeting : Meeting )
+    }
+
+    class Meeting {
+        participantEmails : String []
+        startTime : DateTime
+        endTime : DateTime
+        subject : String
+    }
+
+    Meeting " * " -- "1" MeetingRoom
+    MeetingRoom "1" -- "1" MeetingRoomUniqueId
+
+    enum MeetingRoomUniqueId {
+        A
+        B
+        C
+        D
+        E
+        F
+        G
+        H
+        I
+        J
+    }
+}
+
+@enduml
