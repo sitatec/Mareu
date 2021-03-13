@@ -1,0 +1,57 @@
+package com.sitatech.mareu.domain.models;
+
+import com.sitatech.mareu.domain.enums.MeetingRoomUniqueId;
+
+import static org.junit.Assert.assertEquals;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
+
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
+
+@RunWith(JUnit4.class)
+public class MeetingTest {
+
+    private static Meeting meeting;
+    private static final List<String> MEETING_PARTICIPANTS = Arrays.asList(
+            "maxim@lamezone.com", "test.t@test.t", "fake@test.com", "last@one.com"
+    );
+
+    @Before
+    public void setUp(){;
+        meeting = new Meeting(MEETING_PARTICIPANTS, LocalDateTime.now(), Duration.ofMinutes(45),
+                MeetingRoomUniqueId.A, "Subject", 0xFF00AA);
+    }
+
+    @Test
+    public void meeting_should_have_default_duration_to_45_minutes(){
+        final Meeting meeting = new Meeting(MEETING_PARTICIPANTS, LocalDateTime.now(),
+                MeetingRoomUniqueId.A, "Subject", 0xFF00AA
+        );
+        assertEquals(meeting.getDuration().toMinutes(), 45);
+    }
+
+    @Test
+    public void meeting_title_should_be_formatted(){
+        final String expectedTitle =  String.join(" - ","Réunion " + meeting.getRoomId(),
+                meeting.getFormattedTime(), meeting.getSubject());
+        assertEquals(meeting.getTitle(), expectedTitle);
+    }
+
+    @Test
+    public void meeting_subtitle_should_contains_participants_email_addresses(){
+        assertEquals(meeting.getSubtitle(), String.join(", ", MEETING_PARTICIPANTS));
+    }
+
+    @Test
+    public void meeting_time_should_be_formatted(){
+        final String expectedTime =
+                meeting.getDateTime().getHour() + "h" + meeting.getDateTime().getMinute();
+        assertEquals(meeting.getFormattedTime(), expectedTime);
+    }
+
+}
