@@ -1,7 +1,6 @@
 package com.sitatech.mareu.ui.meetings_list;
 
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -10,11 +9,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.sitatech.mareu.databinding.MeetingRecyclerviewItemBinding;
 import com.sitatech.mareu.events.DeleteMeetingEvent;
 import com.sitatech.mareu.events.DisplayMeetingEvent;
-import com.sitatech.mareu.models.Meeting;
+import com.sitatech.mareu.domain.models.Meeting;
 
 import org.greenrobot.eventbus.EventBus;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class MeetingsListAdapter extends RecyclerView.Adapter<MeetingsListAdapter.ViewHolder> {

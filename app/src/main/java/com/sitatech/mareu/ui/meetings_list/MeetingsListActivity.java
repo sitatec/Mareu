@@ -11,7 +11,7 @@ import android.view.MenuItem;
 import com.sitatech.mareu.R;
 import com.sitatech.mareu.databinding.ActivityMeetingListBinding;
 import com.sitatech.mareu.events.DeleteMeetingEvent;
-import com.sitatech.mareu.models.Meeting;
+import com.sitatech.mareu.domain.models.Meeting;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;

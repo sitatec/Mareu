@@ -23,10 +23,20 @@ public class TimeSlotTest {
     }
 
     @Test
+    public void default_slot_duration_must_be_45_minutes(){
+        final TimeSlot slot = new TimeSlot(LocalDateTime.now());
+        assertEquals(slot.getDuration().toMinutes(), 45);
+    }
+
+    ///////////////////// TimeSlot.getEndTime() ///////////////////////
+
+    @Test
     public void should_return_the_end_time_of_time_slot(){
         final LocalDateTime expectedResult = timeSlot.getStartTime().plus(timeSlot.getDuration());
         assertEquals(timeSlot.getEndTime(), expectedResult);
     }
+
+    ///////////////////// TimeSlot.overlapsWith() ///////////////////////
 
     @Test
     public void should_wrap_the_given_time_slot(){

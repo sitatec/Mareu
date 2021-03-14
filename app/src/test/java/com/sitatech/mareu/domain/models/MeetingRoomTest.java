@@ -1,6 +1,7 @@
 package com.sitatech.mareu.domain.models;
 
 import com.sitatech.mareu.domain.enums.MeetingRoomUniqueId;
+import com.sitatech.mareu.domain.exceptions.FreeTimeSlotReleaseAttempt;
 import com.sitatech.mareu.domain.exceptions.TimeSlotOverlapException;
 
 import static org.junit.Assert.assertEquals;
@@ -14,7 +15,6 @@ import org.junit.runners.JUnit4;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @RunWith(JUnit4.class)
 public class MeetingRoomTest {
@@ -76,14 +76,15 @@ public class MeetingRoomTest {
         assertThrows(TimeSlotOverlapException.class, () -> meetingRoom.reserve(timeSlot));
     }
 
-    ///////////////////// MeetingRoom.dispose() ///////////////////////
+    ///////////////////// MeetingRoom.release() ///////////////////////
+
     @Test
-    public void should_dispose_the_given_slot() throws TimeSlotOverlapException {
+    public void should_dispose_the_given_slot() throws TimeSlotOverlapException, FreeTimeSlotReleaseAttempt {
         final TimeSlot timeSlot1 = new TimeSlot(LocalDateTime.now(), Duration.ofHours(1));
         final TimeSlot timeSlot2 = new TimeSlot(timeSlot1.getEndTime(), Duration.ofHours(1));
         meetingRoom.reserve(timeSlot1, timeSlot2);
         assertEquals(meetingRoom.getAllReservedSlots().size(), 2);
-        meetingRoom.dispose(timeSlot1);
+        meetingRoom.release(timeSlot1);
         assertEquals(meetingRoom.getAllReservedSlots().size(), 1);
     }
 

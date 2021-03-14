@@ -1,0 +1,59 @@
+@startuml
+
+scale 1.2
+skinparam nodesep 100
+skinparam ranksep 90
+
+title Domain model
+
+package MeetingRoomReservation {
+
+    class MeetingRoom {
+        isAvailableAt( timeSlot : TimeSlot) : Boolean
+        reserve( timeSlot : TimeSlot)
+        release( timeSlot : TimeSlot)
+    }
+
+    class Meeting {
+        participantEmails : String []
+        subject : String
+    }
+
+    class MeetingScheduler {
+        schedule(meeting : Meeting)
+        cancel(meeting : Meeting)
+'        getAvailableMeetingRoomsAt( timeSlot : TimeSlot) : MeetingRoom []
+        getAllMeetingRooms() : MeetingRoom []
+        getAllPlannedMeetings() : Meeting []
+        getPlannedMeetingsByDate(date : Date) : Meeting []
+        getPlannedMeetingsByRoom(roomId : MeetingRoomUniqueId) : Meeting []
+    }
+
+    class TimeSlot {
+        startTime : LocalDateTime
+        duration : Duration
+        overlapsWith(otherSlot: TimeSlot) : Boolean
+    }
+
+    enum MeetingRoomUniqueId {
+        A
+        B
+        C
+        D
+        E
+        F
+        G
+        H
+        I
+        J
+    }
+
+    TimeSlot "1" -l- "1..10" Meeting
+    MeetingRoom "1..10" -- "*" TimeSlot
+    MeetingRoom "1  " -- " * " Meeting
+    MeetingRoomUniqueId "1" - "1" MeetingRoom
+    MeetingRoom "10        " -- "1" MeetingScheduler
+    MeetingScheduler "1" -r- "*" Meeting
+}
+
+@enduml

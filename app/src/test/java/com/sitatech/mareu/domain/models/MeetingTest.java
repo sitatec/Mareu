@@ -20,16 +20,17 @@ public class MeetingTest {
     private static final List<String> MEETING_PARTICIPANTS = Arrays.asList(
             "maxim@lamezone.com", "test.t@test.t", "fake@test.com", "last@one.com"
     );
+    private static final TimeSlot DEFAULT_SLOT = new TimeSlot(LocalDateTime.now(), Duration.ofMinutes(45));
 
     @Before
     public void setUp(){;
-        meeting = new Meeting(MEETING_PARTICIPANTS, LocalDateTime.now(), Duration.ofMinutes(45),
+        meeting = new Meeting(MEETING_PARTICIPANTS, DEFAULT_SLOT,
                 MeetingRoomUniqueId.A, "Subject", 0xFF00AA);
     }
 
     @Test
     public void meeting_should_have_default_duration_to_45_minutes(){
-        final Meeting meeting = new Meeting(MEETING_PARTICIPANTS, LocalDateTime.now(),
+        final Meeting meeting = new Meeting(MEETING_PARTICIPANTS, DEFAULT_SLOT,
                 MeetingRoomUniqueId.A, "Subject", 0xFF00AA
         );
         assertEquals(meeting.getDuration().toMinutes(), 45);
@@ -49,8 +50,8 @@ public class MeetingTest {
 
     @Test
     public void meeting_time_should_be_formatted(){
-        final String expectedTime =
-                meeting.getDateTime().getHour() + "h" + meeting.getDateTime().getMinute();
+        final String hour = String.format("%02d", meeting.getDateTime().getHour());
+        final String expectedTime = hour + "h" + meeting.getDateTime().getMinute();
         assertEquals(meeting.getFormattedTime(), expectedTime);
     }
 

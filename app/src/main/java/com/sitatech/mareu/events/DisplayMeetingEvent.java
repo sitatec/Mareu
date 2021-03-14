@@ -1,6 +1,6 @@
 package com.sitatech.mareu.events;
 
-import com.sitatech.mareu.models.Meeting;
+import com.sitatech.mareu.domain.models.Meeting;
 
 public class DisplayMeetingEvent {
     public final Meeting meetingToDisplay;
