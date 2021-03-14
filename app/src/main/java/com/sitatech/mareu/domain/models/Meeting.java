@@ -2,6 +2,8 @@ package com.sitatech.mareu.domain.models;
 
 import com.sitatech.mareu.domain.enums.MeetingRoomUniqueId;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -10,11 +12,8 @@ import java.util.List;
 
 public class Meeting {
 
-    private static final Duration DEFAULT_DURATION = Duration.ofMinutes(45);
-
     private List<String> participantEmails;
-    private LocalDateTime dateTime;
-    private Duration duration;
+    private TimeSlot timeSlot;
     private MeetingRoomUniqueId roomId;
     private String subject;
     private int color;
@@ -23,24 +22,13 @@ public class Meeting {
 
     }
 
-    public Meeting(List<String> participantEmails, LocalDateTime dateTime, Duration duration, MeetingRoomUniqueId roomId, String subject, int color) {
+    public Meeting(List<String> participantEmails, TimeSlot timeSlot, MeetingRoomUniqueId roomId, String subject, int color) {
         this.participantEmails = participantEmails;
-        this.dateTime = dateTime;
-        this.duration = duration;
+        this.timeSlot = timeSlot;
         this.roomId = roomId;
         this.subject = subject;
         this.color = color;
     }
-
-    public Meeting(List<String> participantEmails, LocalDateTime dateTime, MeetingRoomUniqueId roomId, String subject, int color) {
-        this.participantEmails = participantEmails;
-        this.dateTime = dateTime;
-        this.roomId = roomId;
-        this.subject = subject;
-        this.color = color;
-        this.duration = DEFAULT_DURATION;
-    }
-
 
     public List<String> getParticipantEmails() {
         return participantEmails;
@@ -59,13 +47,8 @@ public class Meeting {
     }
 
     public LocalDateTime getDateTime() {
-        return dateTime;
+        return timeSlot.getStartTime();
     }
-
-    public void setDateTime(LocalDateTime dateTime) {
-        this.dateTime = dateTime;
-    }
-
 
     public MeetingRoomUniqueId getRoomId() {
         return roomId;
@@ -84,11 +67,7 @@ public class Meeting {
     }
 
     public Duration getDuration() {
-        return duration;
-    }
-
-    public void setDuration(Duration duration) {
-        this.duration = duration;
+        return timeSlot.getDuration();
     }
 
     public String getTitle(){
@@ -100,9 +79,18 @@ public class Meeting {
     }
 
     public String getFormattedTime(){
-        return dateTime.format(DateTimeFormatter.ofPattern("HH'h'mm"));
+        return getDateTime().format(DateTimeFormatter.ofPattern("HH'h'mm"));
     }
 
+    public TimeSlot getTimeSlot() {
+        return timeSlot;
+    }
+
+    public void setTimeSlot(TimeSlot timeSlot) {
+        this.timeSlot = timeSlot;
+    }
+
+    @NotNull
     private String joinStrings(String delimiter, String... strings){
         // String.join() require JAVA 8 which require android API level >=26
         final List<String> stringsToJoin = Arrays.asList(strings);

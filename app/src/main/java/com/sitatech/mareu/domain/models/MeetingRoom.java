@@ -1,7 +1,10 @@
 package com.sitatech.mareu.domain.models;
 
 import com.sitatech.mareu.domain.enums.MeetingRoomUniqueId;
+import com.sitatech.mareu.domain.exceptions.FreeTimeSlotReleaseAttempt;
 import com.sitatech.mareu.domain.exceptions.TimeSlotOverlapException;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,12 +37,12 @@ public class MeetingRoom {
             throw new TimeSlotOverlapException();
     }
 
-    public void reserve(TimeSlot ...timeSlots) throws TimeSlotOverlapException{
+    public void reserve(TimeSlot @NotNull ...timeSlots) throws TimeSlotOverlapException{
         for (TimeSlot currentSlot : timeSlots) reserve(currentSlot);
     }
 
-    public void dispose(TimeSlot timeSlot){
-        reservedSlots.remove(timeSlot);
+    public void release(TimeSlot timeSlot) throws FreeTimeSlotReleaseAttempt {
+        if(!reservedSlots.remove(timeSlot)) throw new FreeTimeSlotReleaseAttempt();
     }
 
     public MeetingRoomUniqueId getUniqueId() {

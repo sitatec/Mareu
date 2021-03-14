@@ -4,12 +4,19 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 
 public class TimeSlot {
+    private static final Duration DEFAULT_DURATION = Duration.ofMinutes(45);
+
     private LocalDateTime startTime;
     private Duration duration;
 
     public TimeSlot(LocalDateTime startTime, Duration duration) {
         this.startTime = startTime;
         this.duration = duration;
+    }
+
+    public TimeSlot(LocalDateTime startTime) {
+        this.startTime = startTime;
+        this.duration = DEFAULT_DURATION;
     }
 
     public LocalDateTime getStartTime() {
