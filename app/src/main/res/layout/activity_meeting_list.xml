@@ -12,6 +12,7 @@
         tools:listitem="@layout/meeting_recyclerview_item"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/schedule_meeting_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_add_24"

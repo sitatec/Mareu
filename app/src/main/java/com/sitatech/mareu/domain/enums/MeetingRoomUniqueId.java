@@ -1,5 +1,7 @@
 package com.sitatech.mareu.domain.enums;
 
+import androidx.annotation.NonNull;
+
 public enum MeetingRoomUniqueId {
     A,
     B,
@@ -10,5 +12,11 @@ public enum MeetingRoomUniqueId {
     G,
     H,
     I,
-    J
+    J;
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "Réunion " + this.name();
+    }
 }

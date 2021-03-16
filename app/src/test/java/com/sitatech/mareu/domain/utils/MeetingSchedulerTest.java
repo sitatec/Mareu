@@ -19,14 +19,17 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @RunWith(JUnit4.class)
 public class MeetingSchedulerTest {
 
-    private static final List<String> MEETING_PARTICIPANTS = Arrays.asList(
+    private static final Set<String> MEETING_PARTICIPANTS = new HashSet<>(Arrays.asList(
             "maxim@lamezone.com", "test.t@test.t", "fake@test.com", "last@one.com"
-    );
+    ));
     private MeetingScheduler meetingScheduler ;
     private final Meeting defaultMeeting = new Meeting(MEETING_PARTICIPANTS,
             new TimeSlot(LocalDateTime.now()), MeetingRoomUniqueId.D, "SUBJECT", 0xFFAACC);

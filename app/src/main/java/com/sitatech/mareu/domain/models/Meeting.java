@@ -1,5 +1,6 @@
 package com.sitatech.mareu.domain.models;
 
+import com.sitatech.mareu.R;
 import com.sitatech.mareu.domain.enums.MeetingRoomUniqueId;
 
 import org.jetbrains.annotations.NotNull;
@@ -9,10 +10,11 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 public class Meeting {
 
-    private List<String> participantEmails;
+    private Set<String> participantEmails;
     private TimeSlot timeSlot;
     private MeetingRoomUniqueId roomId;
     private String subject;
@@ -22,7 +24,7 @@ public class Meeting {
 
     }
 
-    public Meeting(List<String> participantEmails, TimeSlot timeSlot, MeetingRoomUniqueId roomId, String subject, int color) {
+    public Meeting(Set<String> participantEmails, TimeSlot timeSlot, MeetingRoomUniqueId roomId, String subject, int color) {
         this.participantEmails = participantEmails;
         this.timeSlot = timeSlot;
         this.roomId = roomId;
@@ -30,11 +32,19 @@ public class Meeting {
         this.color = color;
     }
 
-    public List<String> getParticipantEmails() {
+    public Meeting(Set<String> participantEmails, TimeSlot timeSlot, MeetingRoomUniqueId roomId, String subject) {
+        this.participantEmails = participantEmails;
+        this.timeSlot = timeSlot;
+        this.roomId = roomId;
+        this.subject = subject;
+        this.color = R.color.default_meeting_color;
+    }
+
+    public Set<String> getParticipantEmails() {
         return participantEmails;
     }
 
-    public void setParticipantEmails(List<String> participantEmails) {
+    public void setParticipantEmails(Set<String> participantEmails) {
         this.participantEmails = participantEmails;
     }
 
@@ -71,11 +81,11 @@ public class Meeting {
     }
 
     public String getTitle(){
-        return joinStrings(" - ", "Réunion " + roomId, getFormattedTime(), subject);
+        return joinStrings(" - ", roomId.toString(), getFormattedTime(), subject);
     }
 
     public String getSubtitle(){
-        return joinStrings(", ",(String[]) participantEmails.toArray());
+        return joinStrings(", ", participantEmails.toArray(new String[0]));
     }
 
     public String getFormattedTime(){

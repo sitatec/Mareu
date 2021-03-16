@@ -22,11 +22,20 @@ package MeetingRoomReservation {
     class MeetingScheduler {
         schedule(meeting : Meeting)
         cancel(meeting : Meeting)
-'        getAvailableMeetingRoomsAt( timeSlot : TimeSlot) : MeetingRoom []
-        getAllMeetingRooms() : MeetingRoom []
-        getAllPlannedMeetings() : Meeting []
-        getPlannedMeetingsByDate(date : Date) : Meeting []
-        getPlannedMeetingsByRoom(roomId : MeetingRoomUniqueId) : Meeting []
+    }
+
+    class ScheduledMeetingRepository {
+        add(meeting : Meeting)
+        remove(meeting : Meeting)
+        getAllMeetings() : Meeting []
+        getByDate(date : Date) : Meeting []
+        getByRoom(roomId : MeetingRoomUniqueId) : Meeting []
+    }
+
+    class MeetingRoomRepository{
+        get(roomId : MeetingRoomUniqueId) : MeetingRoom
+        getAll() : MeetingRoom []
+'       getAvailableMeetingRoomsAt( timeSlot : TimeSlot) : MeetingRoom []
     }
 
     class TimeSlot {
@@ -48,12 +57,14 @@ package MeetingRoomReservation {
         J
     }
 
-    TimeSlot "1" -l- "1..10" Meeting
-    MeetingRoom "1..10" -- "*" TimeSlot
-    MeetingRoom "1  " -- " * " Meeting
-    MeetingRoomUniqueId "1" - "1" MeetingRoom
-    MeetingRoom "10        " -- "1" MeetingScheduler
-    MeetingScheduler "1" -r- "*" Meeting
+    Meeting "1..10" -- "1" TimeSlot
+'    MeetingRoom "1..10" -- "*" TimeSlot
+    MeetingRoom "1" - "*" Meeting
+    MeetingRoomUniqueId "1 " -- "1 " MeetingRoom
+    MeetingRoomRepository "1     " o-- "10" MeetingRoom
+    MeetingRoomRepository "1" - "1" MeetingScheduler
+    MeetingScheduler "1 " -- "1 " ScheduledMeetingRepository
+    Meeting "*" -o "1 " ScheduledMeetingRepository
 }
 
 @enduml

@@ -7,16 +7,14 @@ import com.sitatech.mareu.domain.exceptions.FreeTimeSlotReleaseAttempt;
 import com.sitatech.mareu.domain.exceptions.TimeSlotOverlapException;
 import com.sitatech.mareu.domain.models.Meeting;
 import com.sitatech.mareu.domain.models.MeetingRoom;
-import com.sitatech.mareu.domain.models.TimeSlot;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -29,7 +27,7 @@ public class MeetingScheduler {
 
     private MeetingScheduler(){
         scheduledMeetings = new ArrayList<>();
-        meetingRooms = new HashMap<>();
+        meetingRooms = new TreeMap<>();
         initializeMeetingRooms();
     }
 

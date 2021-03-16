@@ -3,4 +3,9 @@
     <string name="delete_meeting_content_description">Delete Meeting</string>
     <string name="create_new_meeting_content_description">Create new meeting</string>
     <string name="filter_meetings_action_title">Filter meetings</string>
+    <string name="duration_picker_positive_btn">OK</string>
+    <string name="duration_picker_negative_btn">Annuler</string>
+    <string name="required_field_error_msg">Champ invalide</string>
+    <string name="meeting_scheduled_successefully_msg">Réunion planifié avec succès</string>
+    <string name="time_slot_overlaps_msg">Le créneau que vous avez choisi chevauche un créneau déjà réservé</string>
 </resources>

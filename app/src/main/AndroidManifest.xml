@@ -9,7 +9,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Mareu">
-        <activity android:name=".ui.meetings_list.MeetingsListActivity"
+        <activity
+            android:name=".ui.schedule_meeting.ScheduleMeetingActivity"
+            android:parentActivityName=".ui.meetings_list.MeetingsListActivity"/>
+        <activity
+            android:name=".ui.meetings_list.MeetingsListActivity"
             android:label="Ma réu">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

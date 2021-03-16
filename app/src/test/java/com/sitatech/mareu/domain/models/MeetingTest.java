@@ -11,15 +11,17 @@ import org.junit.runners.JUnit4;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @RunWith(JUnit4.class)
 public class MeetingTest {
 
     private static Meeting meeting;
-    private static final List<String> MEETING_PARTICIPANTS = Arrays.asList(
+    private static final Set<String> MEETING_PARTICIPANTS = new HashSet<>( Arrays.asList(
             "maxim@lamezone.com", "test.t@test.t", "fake@test.com", "last@one.com"
-    );
+    ));
     private static final TimeSlot DEFAULT_SLOT = new TimeSlot(LocalDateTime.now(), Duration.ofMinutes(45));
 
     @Before
