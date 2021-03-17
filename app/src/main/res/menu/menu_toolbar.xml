@@ -3,9 +3,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/filter_meetings"
-        android:icon="@drawable/ic_filter_list_24"
-        app:showAsAction="always"
-        android:title="@string/filter_meetings_action_title" />
+        android:id="@+id/filter_by_date"
+        app:showAsAction="never"
+        android:title="Filtrer par date" />
+
+    <item
+        android:id="@+id/filter_by_room"
+        app:showAsAction="collapseActionView"
+        android:title="Filtrer par salle"
+        app:actionViewClass="android.widget.Spinner"/>
+
+    <item
+        android:id="@+id/reset_filter"
+        app:showAsAction="never"
+        android:title="Réinitialiser le filtre"
+        />
 
 </menu>

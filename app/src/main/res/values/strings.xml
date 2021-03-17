@@ -8,4 +8,6 @@
     <string name="required_field_error_msg">Champ invalide</string>
     <string name="meeting_scheduled_successefully_msg">Réunion planifié avec succès</string>
     <string name="time_slot_overlaps_msg">Le créneau que vous avez choisi chevauche un créneau déjà réservé</string>
+    <string name="apply_filter_btn_txt">Appliquer</string>
+    <string name="reset_filter_btn_txt">Réinitialiser</string>
 </resources>

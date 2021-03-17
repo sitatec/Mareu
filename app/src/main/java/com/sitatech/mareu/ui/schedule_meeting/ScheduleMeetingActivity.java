@@ -11,10 +11,11 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TimePicker;
 
-import com.google.android.material.snackbar.BaseTransientBottomBar;
+
 import com.google.android.material.snackbar.Snackbar;
 import com.sitatech.mareu.R;
 import com.sitatech.mareu.databinding.ActivityScheduleMeetingBinding;
+import com.sitatech.mareu.domain.enums.MeetingRoomUniqueId;
 import com.sitatech.mareu.domain.exceptions.TimeSlotOverlapException;
 import com.sitatech.mareu.domain.models.Meeting;
 import com.sitatech.mareu.domain.models.MeetingRoom;
@@ -23,6 +24,7 @@ import com.sitatech.mareu.domain.utils.MeetingScheduler;
 import com.sitatech.mareu.ui.schedule_meeting.fragments.pickers.DatePickerFragment;
 import com.sitatech.mareu.ui.schedule_meeting.fragments.pickers.DurationPickerFragment;
 import com.sitatech.mareu.ui.schedule_meeting.fragments.pickers.TimePickerFragment;
+import com.sitatech.mareu.ui.utils.MeetingRoomSpinnerHelper;
 
 import java.time.Duration;
 import java.time.LocalDate;
@@ -43,25 +45,13 @@ public class ScheduleMeetingActivity extends AppCompatActivity {
     private LocalDate meetingDate;
     private LocalTime meetingStartTime;
     private Duration meetingDuration;
-    private MeetingRoom meetingRoom;
+    private MeetingRoomUniqueId meetingRoomId;
     private DatePickerFragment datePickerFragment;
     private TimePickerFragment timePickerFragment;
     private DurationPickerFragment durationPickerFragment;
     private Set<String> participantEmails = new HashSet<>();
     private int color = R.color.default_meeting_color;
 
-    private final AdapterView.OnItemSelectedListener onMeetingRoomSelectedListener = new AdapterView.OnItemSelectedListener() {
-        @Override
-        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-            if(--position < 0) return; // The first item is a "Hint"
-            viewBinding.meetingRoomErrorHint.setVisibility(View.INVISIBLE);// The error hint might be
-            // visible if the user tried to submit the form without selecting the meeting room, so we hide it
-            meetingRoom = meetingScheduler.getAllMeetingRooms().get(position);
-        }
-        @Override public void onNothingSelected(AdapterView<?> parent) {
-            viewBinding.meetingRoomErrorHint.setVisibility(View.VISIBLE);
-        }
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,25 +81,12 @@ public class ScheduleMeetingActivity extends AppCompatActivity {
     }
 
     private void setUpMeetingRoomSelector(){
-        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item){
-            @Override public boolean isEnabled(int position) {
-                return position > 0; // The first item mustn't be selected because it is a "Hint".
-            }
-        };
-        adapter.add("Choisir la salle");
-        adapter.addAll(getMeetingRoomNames());
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        viewBinding.meetingRoomSelector.setAdapter(adapter);
-        viewBinding.meetingRoomSelector.setOnItemSelectedListener(onMeetingRoomSelectedListener);
+        MeetingRoomSpinnerHelper.setUp(this, viewBinding.meetingRoomSelector,
+                roomId -> meetingRoomId = roomId,
+                () -> viewBinding.meetingRoomErrorHint.setVisibility(View.VISIBLE)
+        );
     }
 
-    private List<String> getMeetingRoomNames(){
-        final List<String> meetingRoomNames = new ArrayList<>();
-        for (MeetingRoom meetingRoom : meetingScheduler.getAllMeetingRooms()){
-            meetingRoomNames.add(meetingRoom.getUniqueId().toString());
-        }
-        return meetingRoomNames;
-    }
 
     private void showTimePicker(View v){
         timePickerFragment.show(getSupportFragmentManager(), "meeting_start_time_picker");
@@ -123,7 +100,7 @@ public class ScheduleMeetingActivity extends AppCompatActivity {
     }
 
     private void showDatePicker(View v){
-        datePickerFragment.show(getSupportFragmentManager(), "meeting_date_time_picker");
+        datePickerFragment.show(getSupportFragmentManager(), "meeting_date_picker");
     }
 
     private void onMeetingDateSet(DatePicker view, int year, int month, int day){
@@ -158,19 +135,19 @@ public class ScheduleMeetingActivity extends AppCompatActivity {
             final String meetingSubject = viewBinding.meetingSubjectEdit.getText().toString();
             final LocalDateTime meetingDateTime = LocalDateTime.of(meetingDate, meetingStartTime);
             final TimeSlot meetingSlot = new TimeSlot(meetingDateTime, meetingDuration);
-            final Meeting meeting = new Meeting(participantEmails, meetingSlot, meetingRoom.getUniqueId(), meetingSubject, color);
+            final Meeting meeting = new Meeting(participantEmails, meetingSlot, meetingRoomId, meetingSubject, color);
             try {
                 meetingScheduler.schedule(meeting);
-                Snackbar.make(viewBinding.getRoot(), R.string.meeting_scheduled_successefully_msg, Snackbar.LENGTH_SHORT);
+                Snackbar.make(viewBinding.getRoot(), R.string.meeting_scheduled_successefully_msg, Snackbar.LENGTH_SHORT).show();
             } catch (TimeSlotOverlapException e) {
-                Snackbar.make(viewBinding.getRoot(), R.string.time_slot_overlaps_msg, Snackbar.LENGTH_LONG);
+                Snackbar.make(viewBinding.getRoot(), R.string.time_slot_overlaps_msg, Snackbar.LENGTH_LONG).show();
             }
         }
     }
 
     private boolean validateForm(){
         boolean isValid = true;
-        if(meetingRoom == null) {
+        if(meetingRoomId == null) {
             isValid = false;
             viewBinding.meetingRoomErrorHint.setVisibility(View.VISIBLE);
         }if( meetingDate == null ){
