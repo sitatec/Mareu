@@ -8,18 +8,19 @@ import android.widget.Spinner;
 
 import com.sitatech.mareu.domain.enums.MeetingRoomUniqueId;
 import com.sitatech.mareu.domain.models.MeetingRoom;
-import com.sitatech.mareu.domain.utils.MeetingScheduler;
+import com.sitatech.mareu.domain.repositories.MeetingRoomRepository;
+import com.sitatech.mareu.utils.DependencyContainer;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class MeetingRoomSpinnerHelper {
 
-    public static interface OnItemSelectedListener {
+    public interface OnItemSelectedListener {
         void onSelect(MeetingRoomUniqueId chosenId);
     }
 
-    private static final MeetingScheduler MEETING_SCHEDULER = MeetingScheduler.getInstance();
+    private static final MeetingRoomRepository MEETING_ROOM_REPOSITORY = DependencyContainer.getMeetingRoomRepository();
 
     public static void setUp(Context context, Spinner spinner, OnItemSelectedListener onItemSelected, Runnable onNothingSelected){
         final ArrayAdapter<String> adapter = setUpSpinnerAdapter(context);
@@ -28,7 +29,7 @@ public abstract class MeetingRoomSpinnerHelper {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if(--position < 0) return; // The first item is a "Hint"
-                onItemSelected.onSelect(MEETING_SCHEDULER.getAllMeetingRooms().get(position).getUniqueId());
+                onItemSelected.onSelect(MEETING_ROOM_REPOSITORY.getAll().get(position).getUniqueId());
             }
             @Override public void onNothingSelected(AdapterView<?> parent) {
                 onNothingSelected.run();
@@ -43,7 +44,7 @@ public abstract class MeetingRoomSpinnerHelper {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if(--position < 0) return; // The first item is a "Hint"
-                onItemSelected.onSelect(MEETING_SCHEDULER.getAllMeetingRooms().get(position).getUniqueId());
+                onItemSelected.onSelect(MEETING_ROOM_REPOSITORY.getAll().get(position).getUniqueId());
             }
             @Override public void onNothingSelected(AdapterView<?> parent) {}
         });
@@ -63,7 +64,7 @@ public abstract class MeetingRoomSpinnerHelper {
 
     private static List<String> getMeetingRoomNames(){
         final List<String> meetingRoomNames = new ArrayList<>();
-        for (MeetingRoom meetingRoom : MEETING_SCHEDULER.getAllMeetingRooms()){
+        for (MeetingRoom meetingRoom : MEETING_ROOM_REPOSITORY.getAll()){
             meetingRoomNames.add(meetingRoom.getUniqueId().toString());
         }
         return meetingRoomNames;

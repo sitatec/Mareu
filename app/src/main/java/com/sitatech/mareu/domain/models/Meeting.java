@@ -3,7 +3,7 @@ package com.sitatech.mareu.domain.models;
 import com.sitatech.mareu.R;
 import com.sitatech.mareu.domain.enums.MeetingRoomUniqueId;
 
-import org.jetbrains.annotations.NotNull;
+import androidx.annotation.NonNull;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -20,9 +20,7 @@ public class Meeting {
     private String subject;
     private int color;
 
-    public Meeting(){
-
-    }
+    public Meeting(){}
 
     public Meeting(Set<String> participantEmails, TimeSlot timeSlot, MeetingRoomUniqueId roomId, String subject, int color) {
         this.participantEmails = participantEmails;
@@ -100,7 +98,7 @@ public class Meeting {
         this.timeSlot = timeSlot;
     }
 
-    @NotNull
+    @NonNull
     private String joinStrings(String delimiter, String... strings){
         // String.join() require JAVA 8 which require android API level >=26
         final List<String> stringsToJoin = Arrays.asList(strings);

@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -12,15 +13,19 @@ import android.view.View;
 import android.widget.DatePicker;
 import android.widget.Spinner;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.sitatech.mareu.R;
 import com.sitatech.mareu.databinding.ActivityMeetingListBinding;
 import com.sitatech.mareu.domain.enums.MeetingRoomUniqueId;
+import com.sitatech.mareu.domain.exceptions.FreeTimeSlotReleaseAttempt;
+import com.sitatech.mareu.domain.repositories.ScheduledMeetingRepository;
 import com.sitatech.mareu.domain.utils.MeetingScheduler;
 import com.sitatech.mareu.events.DeleteMeetingEvent;
 import com.sitatech.mareu.domain.models.Meeting;
 import com.sitatech.mareu.ui.schedule_meeting.ScheduleMeetingActivity;
 import com.sitatech.mareu.ui.schedule_meeting.fragments.pickers.DatePickerFragment;
 import com.sitatech.mareu.ui.utils.MeetingRoomSpinnerHelper;
+import com.sitatech.mareu.utils.DependencyContainer;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -31,8 +36,8 @@ import java.util.List;
 
 public class MeetingsListActivity extends AppCompatActivity {
 
-    private final MeetingScheduler meetingScheduler = MeetingScheduler.getInstance();
-    private final List<Meeting> meetings = new ArrayList<>(meetingScheduler.getAllScheduledMeetings());
+    private final ScheduledMeetingRepository scheduledMeetingRepository = DependencyContainer.getScheduledMeetingRepository();
+    private final List<Meeting> meetings = new ArrayList<>(scheduledMeetingRepository.getAll());
     private ActivityMeetingListBinding viewBinding;
     private MeetingsListAdapter meetingsListAdapter;
     private DatePickerFragment datePickerFragment;
@@ -60,7 +65,7 @@ public class MeetingsListActivity extends AppCompatActivity {
     private void onMeetingFilteredByDate(DatePicker view, int year, int month, int day){
         final LocalDate date = LocalDate.of(year, month, day);
         meetings.clear();
-        meetings.addAll(meetingScheduler.getScheduledMeetingsByDate(date));
+        meetings.addAll(scheduledMeetingRepository.getByDate(date));
         meetingsListAdapter.notifyDataSetChanged();
     }
 
@@ -74,13 +79,15 @@ public class MeetingsListActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_toolbar, menu);
         final Spinner roomSelector = (Spinner) menu.findItem(R.id.filter_by_room).getActionView();
+        roomSelector.setBackgroundColor(Color.WHITE);
+        roomSelector.setPadding(20,20, 20 ,20);
         MeetingRoomSpinnerHelper.setUp(this, roomSelector, this::onMeetingFilteredByRoom);
         return super.onCreateOptionsMenu(menu);
     }
 
     private void onMeetingFilteredByRoom(MeetingRoomUniqueId roomUniqueId){
         meetings.clear();
-        meetings.addAll(meetingScheduler.getScheduledMeetingsByRoom(roomUniqueId));
+        meetings.addAll(scheduledMeetingRepository.getByRoom(roomUniqueId));
         meetingsListAdapter.notifyDataSetChanged();
     }
 
@@ -90,7 +97,7 @@ public class MeetingsListActivity extends AppCompatActivity {
             datePickerFragment.show(getSupportFragmentManager(), "filter_date_picker");
         }else if(item.getItemId() == R.id.reset_filter){
             meetings.clear();
-            meetings.addAll(meetingScheduler.getAllScheduledMeetings());
+            meetings.addAll(scheduledMeetingRepository.getAll());
             meetingsListAdapter.notifyDataSetChanged();
         }
         return super.onOptionsItemSelected(item);
@@ -98,8 +105,13 @@ public class MeetingsListActivity extends AppCompatActivity {
 
     @Subscribe
     public void onDeleteMeetingEvent(DeleteMeetingEvent event){
-        meetings.remove(event.meetingToDelete);
-        meetingsListAdapter.notifyDataSetChanged();
+        try {
+            DependencyContainer.getMeetingScheduler().cancel(event.meetingToDelete);
+            meetings.remove(event.meetingToDelete);
+            meetingsListAdapter.notifyDataSetChanged();
+        } catch (FreeTimeSlotReleaseAttempt freeTimeSlotReleaseAttempt) {
+            Snackbar.make(viewBinding.getRoot(), R.string.meeting_deletion_failure, Snackbar.LENGTH_SHORT).show();
+        }
     }
 
     @Override

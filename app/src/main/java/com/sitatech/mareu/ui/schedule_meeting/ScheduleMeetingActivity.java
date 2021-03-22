@@ -5,8 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TimePicker;
@@ -18,22 +16,20 @@ import com.sitatech.mareu.databinding.ActivityScheduleMeetingBinding;
 import com.sitatech.mareu.domain.enums.MeetingRoomUniqueId;
 import com.sitatech.mareu.domain.exceptions.TimeSlotOverlapException;
 import com.sitatech.mareu.domain.models.Meeting;
-import com.sitatech.mareu.domain.models.MeetingRoom;
 import com.sitatech.mareu.domain.models.TimeSlot;
 import com.sitatech.mareu.domain.utils.MeetingScheduler;
 import com.sitatech.mareu.ui.schedule_meeting.fragments.pickers.DatePickerFragment;
 import com.sitatech.mareu.ui.schedule_meeting.fragments.pickers.DurationPickerFragment;
 import com.sitatech.mareu.ui.schedule_meeting.fragments.pickers.TimePickerFragment;
 import com.sitatech.mareu.ui.utils.MeetingRoomSpinnerHelper;
+import com.sitatech.mareu.utils.DependencyContainer;
 
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import top.defaults.colorpicker.ColorPickerPopup;
@@ -41,7 +37,7 @@ import top.defaults.colorpicker.ColorPickerPopup;
 public class ScheduleMeetingActivity extends AppCompatActivity {
 
     private ActivityScheduleMeetingBinding viewBinding;
-    private final MeetingScheduler meetingScheduler = MeetingScheduler.getInstance();
+    private final MeetingScheduler meetingScheduler = DependencyContainer.getMeetingScheduler();
     private LocalDate meetingDate;
     private LocalTime meetingStartTime;
     private Duration meetingDuration;

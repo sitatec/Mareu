@@ -1,14 +1,13 @@
 package com.sitatech.mareu.domain.models;
 
+import androidx.annotation.NonNull;
+
 import com.sitatech.mareu.domain.enums.MeetingRoomUniqueId;
 import com.sitatech.mareu.domain.exceptions.FreeTimeSlotReleaseAttempt;
 import com.sitatech.mareu.domain.exceptions.TimeSlotOverlapException;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 public class MeetingRoom {
     private final MeetingRoomUniqueId uniqueId;
@@ -37,7 +36,7 @@ public class MeetingRoom {
             throw new TimeSlotOverlapException();
     }
 
-    public void reserve(TimeSlot @NotNull ...timeSlots) throws TimeSlotOverlapException{
+    public void reserve(@NonNull TimeSlot ...timeSlots) throws TimeSlotOverlapException{
         for (TimeSlot currentSlot : timeSlots) reserve(currentSlot);
     }
 

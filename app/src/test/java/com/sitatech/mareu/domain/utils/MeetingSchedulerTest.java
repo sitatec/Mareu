@@ -5,6 +5,7 @@ import com.sitatech.mareu.domain.exceptions.FreeTimeSlotReleaseAttempt;
 import com.sitatech.mareu.domain.exceptions.TimeSlotOverlapException;
 import com.sitatech.mareu.domain.models.Meeting;
 import com.sitatech.mareu.domain.models.TimeSlot;
+import com.sitatech.mareu.domain.repositories.ScheduledMeetingRepository;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
@@ -30,7 +31,8 @@ public class MeetingSchedulerTest {
     private static final Set<String> MEETING_PARTICIPANTS = new HashSet<>(Arrays.asList(
             "maxim@lamezone.com", "test.t@test.t", "fake@test.com", "last@one.com"
     ));
-    private MeetingScheduler meetingScheduler ;
+    private MeetingScheduler meetingScheduler;
+    private ScheduledMeetingRepository scheduledMeetingRepository = ScheduledMeetingRepository.getInstance();
     private final Meeting defaultMeeting = new Meeting(MEETING_PARTICIPANTS,
             new TimeSlot(LocalDateTime.now()), MeetingRoomUniqueId.D, "SUBJECT", 0xFFAACC);
 
@@ -43,9 +45,9 @@ public class MeetingSchedulerTest {
 
     @Test
     public void should_schedule_meeting() throws TimeSlotOverlapException {
-        assertTrue(meetingScheduler.getAllScheduledMeetings().isEmpty());
+        assertTrue(scheduledMeetingRepository.getAll().isEmpty());
         meetingScheduler.schedule(defaultMeeting);
-        assertEquals(meetingScheduler.getAllScheduledMeetings().size(), 1);
+        assertEquals(scheduledMeetingRepository.getAll().size(), 1);
     }
 
     @Test
@@ -59,9 +61,9 @@ public class MeetingSchedulerTest {
     @Test
     public void should_cancel_meeting() throws TimeSlotOverlapException, FreeTimeSlotReleaseAttempt {
         meetingScheduler.schedule(defaultMeeting);
-        assertEquals(meetingScheduler.getAllScheduledMeetings().size(), 1);
+        assertEquals(scheduledMeetingRepository.getAll().size(), 1);
         meetingScheduler.cancel(defaultMeeting);
-        assertEquals(meetingScheduler.getAllScheduledMeetings().size(), 0);
+        assertEquals(scheduledMeetingRepository.getAll().size(), 0);
     }
 
     @Test
@@ -71,12 +73,6 @@ public class MeetingSchedulerTest {
         assertThrows(FreeTimeSlotReleaseAttempt.class, () -> meetingScheduler.cancel(notScheduledMeeting));
     }
 
-    ///////////////////// MeetingScheduler.getAllMeetingRooms() ///////////////////////
-
-    @Test
-    public void should_returns_all_meeting_rooms(){
-        assertEquals(meetingScheduler.getAllMeetingRooms().size(), MeetingRoomUniqueId.values().length);
-    }
 
     ///////////////////// MeetingScheduler.getAllScheduledMeetings() ///////////////////////
 

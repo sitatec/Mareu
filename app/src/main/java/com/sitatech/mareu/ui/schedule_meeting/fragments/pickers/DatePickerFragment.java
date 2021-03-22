@@ -3,14 +3,11 @@ package com.sitatech.mareu.ui.schedule_meeting.fragments.pickers;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.os.Bundle;
-import android.widget.AdapterView;
-import android.widget.DatePicker;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
-import java.time.LocalDate;
 import java.util.Calendar;
 
 public class DatePickerFragment extends DialogFragment {

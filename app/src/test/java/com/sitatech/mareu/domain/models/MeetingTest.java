@@ -40,7 +40,7 @@ public class MeetingTest {
 
     @Test
     public void meeting_title_should_be_formatted(){
-        final String expectedTitle =  String.join(" - ","Réunion " + meeting.getRoomId(),
+        final String expectedTitle =  String.join(" - ", meeting.getRoomId().toString(),
                 meeting.getFormattedTime(), meeting.getSubject());
         assertEquals(meeting.getTitle(), expectedTitle);
     }

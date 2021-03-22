@@ -17,7 +17,7 @@ import java.time.Duration;
 public class DurationPickerFragment extends DialogFragment {
     private final OnDurationSetListener listener;
 
-    public static interface OnDurationSetListener {
+    public interface OnDurationSetListener {
         void onDurationSet(Duration duration);
     }
 

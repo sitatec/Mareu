@@ -10,4 +10,5 @@
     <string name="time_slot_overlaps_msg">Le créneau que vous avez choisi chevauche un créneau déjà réservé</string>
     <string name="apply_filter_btn_txt">Appliquer</string>
     <string name="reset_filter_btn_txt">Réinitialiser</string>
+    <string name="meeting_deletion_failure">Echec de la suppression</string>
 </resources>

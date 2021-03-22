@@ -57,8 +57,8 @@ package MeetingRoomReservation {
         J
     }
 
-    Meeting "1..10" -- "1" TimeSlot
-'    MeetingRoom "1..10" -- "*" TimeSlot
+    Meeting "1..10   " -- "1" TimeSlot
+    MeetingRoom "1..10" -- "*" TimeSlot
     MeetingRoom "1" - "*" Meeting
     MeetingRoomUniqueId "1 " -- "1 " MeetingRoom
     MeetingRoomRepository "1     " o-- "10" MeetingRoom
