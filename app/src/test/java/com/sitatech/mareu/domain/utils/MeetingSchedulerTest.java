@@ -5,6 +5,7 @@ import com.sitatech.mareu.domain.exceptions.FreeTimeSlotReleaseAttempt;
 import com.sitatech.mareu.domain.exceptions.TimeSlotOverlapException;
 import com.sitatech.mareu.domain.models.Meeting;
 import com.sitatech.mareu.domain.models.TimeSlot;
+import com.sitatech.mareu.domain.repositories.MeetingRoomRepository;
 import com.sitatech.mareu.domain.repositories.ScheduledMeetingRepository;
 
 import static org.junit.Assert.assertEquals;
@@ -32,13 +33,13 @@ public class MeetingSchedulerTest {
             "maxim@lamezone.com", "test.t@test.t", "fake@test.com", "last@one.com"
     ));
     private MeetingScheduler meetingScheduler;
-    private ScheduledMeetingRepository scheduledMeetingRepository = ScheduledMeetingRepository.getInstance();
+    private ScheduledMeetingRepository scheduledMeetingRepository = new ScheduledMeetingRepository();
     private final Meeting defaultMeeting = new Meeting(MEETING_PARTICIPANTS,
             new TimeSlot(LocalDateTime.now()), MeetingRoomUniqueId.D, "SUBJECT", 0xFFAACC);
 
     @Before
     public void init(){
-        meetingScheduler = MeetingScheduler.getInstanceForTests();
+        meetingScheduler = new MeetingScheduler(scheduledMeetingRepository, new MeetingRoomRepository());
     }
 
     ///////////////////// MeetingScheduler.schedule() ///////////////////////
@@ -82,7 +83,7 @@ public class MeetingSchedulerTest {
                 new TimeSlot(LocalDateTime.now()), MeetingRoomUniqueId.A, "FAKE_SUBJECT", 0xFFAABBCC);
         meetingScheduler.schedule(defaultMeeting);
         meetingScheduler.schedule(meeting);
-        assertEquals(meetingScheduler.getAllScheduledMeetings().size(), 2);
+        assertEquals(scheduledMeetingRepository.getAll().size(), 2);
     }
 
     ///////////////////// MeetingScheduler.getScheduledMeetingsByDate() ///////////////////////
@@ -104,7 +105,7 @@ public class MeetingSchedulerTest {
         meetingScheduler.schedule(yesterdayMeeting);
         meetingScheduler.schedule(tomorrowMeeting);
 
-        final List<Meeting> filteredMeeting = meetingScheduler.getScheduledMeetingsByDate(LocalDate.now().minusDays(1));
+        final List<Meeting> filteredMeeting = scheduledMeetingRepository.getByDate(LocalDate.now().minusDays(1));
         assertTrue(filteredMeeting.contains(yesterdayMeeting));
         assertEquals(filteredMeeting.size(), 1);
     }
@@ -125,8 +126,8 @@ public class MeetingSchedulerTest {
         meetingScheduler.schedule(meeting1);
         meetingScheduler.schedule(meeting2);
 
-        assertEquals(meetingScheduler.getScheduledMeetingsByRoom(MeetingRoomUniqueId.D).size(), 1);
-        assertEquals(meetingScheduler.getScheduledMeetingsByRoom(MeetingRoomUniqueId.A).size(), 2);
+        assertEquals(scheduledMeetingRepository.getByRoom(MeetingRoomUniqueId.D).size(), 1);
+        assertEquals(scheduledMeetingRepository.getByRoom(MeetingRoomUniqueId.A).size(), 2);
     }
 
 }
