@@ -1,22 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
         android:id="@+id/filter_by_date"
         app:showAsAction="never"
-        android:title="Filtrer par date" />
+        android:title="@string/menu_action_filter_by_date_txt" />
 
     <item
         android:id="@+id/filter_by_room"
-        app:showAsAction="collapseActionView"
-        android:title="Filtrer par salle"
-        app:actionViewClass="android.widget.Spinner"/>
+        app:showAsAction="never"
+        android:title="@string/menu_action_filter_by_room_txt"
+        />
+    <!--        app:actionViewClass="android.widget.Spinner"-->
 
     <item
         android:id="@+id/reset_filter"
         app:showAsAction="never"
-        android:title="Réinitialiser le filtre"
+        android:title="@string/menu_action_reset_filters_txt"
         />
 
 </menu>

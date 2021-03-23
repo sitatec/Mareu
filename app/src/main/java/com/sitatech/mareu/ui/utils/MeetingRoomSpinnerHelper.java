@@ -1,6 +1,7 @@
 package com.sitatech.mareu.ui.utils;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -22,8 +23,8 @@ public abstract class MeetingRoomSpinnerHelper {
 
     private static final MeetingRoomRepository MEETING_ROOM_REPOSITORY = DependencyContainer.getMeetingRoomRepository();
 
-    public static void setUp(Context context, Spinner spinner, OnItemSelectedListener onItemSelected, Runnable onNothingSelected){
-        final ArrayAdapter<String> adapter = setUpSpinnerAdapter(context);
+    public static void setUp(Spinner spinner, OnItemSelectedListener onItemSelected, Runnable onNothingSelected){
+        final ArrayAdapter<String> adapter = setUpSpinnerAdapter(spinner.getContext());
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -37,12 +38,13 @@ public abstract class MeetingRoomSpinnerHelper {
         });
     }
 
-    public static void setUp(Context context, Spinner spinner, OnItemSelectedListener onItemSelected){
-        final ArrayAdapter<String> adapter = setUpSpinnerAdapter(context);
+    public static void setUp(Spinner spinner, OnItemSelectedListener onItemSelected){
+        final ArrayAdapter<String> adapter = setUpSpinnerAdapter(spinner.getContext());
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Log.i("Filter_test", MEETING_ROOM_REPOSITORY.getAll().get(position).getUniqueId().toString() + "_helper");
                 if(--position < 0) return; // The first item is a "Hint"
                 onItemSelected.onSelect(MEETING_ROOM_REPOSITORY.getAll().get(position).getUniqueId());
             }

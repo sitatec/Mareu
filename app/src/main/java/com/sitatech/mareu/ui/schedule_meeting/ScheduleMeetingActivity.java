@@ -77,7 +77,7 @@ public class ScheduleMeetingActivity extends AppCompatActivity {
     }
 
     private void setUpMeetingRoomSelector(){
-        MeetingRoomSpinnerHelper.setUp(this, viewBinding.meetingRoomSelector,
+        MeetingRoomSpinnerHelper.setUp(viewBinding.meetingRoomSelector,
                 roomId -> meetingRoomId = roomId,
                 () -> viewBinding.meetingRoomErrorHint.setVisibility(View.VISIBLE)
         );
@@ -134,7 +134,7 @@ public class ScheduleMeetingActivity extends AppCompatActivity {
             final Meeting meeting = new Meeting(participantEmails, meetingSlot, meetingRoomId, meetingSubject, color);
             try {
                 meetingScheduler.schedule(meeting);
-                Snackbar.make(viewBinding.getRoot(), R.string.meeting_scheduled_successefully_msg, Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(viewBinding.getRoot(), R.string.meeting_scheduled_successfully_msg, Snackbar.LENGTH_SHORT).show();
             } catch (TimeSlotOverlapException e) {
                 Snackbar.make(viewBinding.getRoot(), R.string.time_slot_overlaps_msg, Snackbar.LENGTH_LONG).show();
             }

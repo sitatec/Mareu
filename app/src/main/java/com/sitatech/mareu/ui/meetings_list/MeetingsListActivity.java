@@ -1,12 +1,13 @@
 package com.sitatech.mareu.ui.meetings_list;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,7 +20,6 @@ import com.sitatech.mareu.databinding.ActivityMeetingListBinding;
 import com.sitatech.mareu.domain.enums.MeetingRoomUniqueId;
 import com.sitatech.mareu.domain.exceptions.FreeTimeSlotReleaseAttempt;
 import com.sitatech.mareu.domain.repositories.ScheduledMeetingRepository;
-import com.sitatech.mareu.domain.utils.MeetingScheduler;
 import com.sitatech.mareu.events.DeleteMeetingEvent;
 import com.sitatech.mareu.domain.models.Meeting;
 import com.sitatech.mareu.ui.schedule_meeting.ScheduleMeetingActivity;
@@ -41,6 +41,7 @@ public class MeetingsListActivity extends AppCompatActivity {
     private ActivityMeetingListBinding viewBinding;
     private MeetingsListAdapter meetingsListAdapter;
     private DatePickerFragment datePickerFragment;
+    private Spinner filterByRoomSpinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,8 +49,14 @@ public class MeetingsListActivity extends AppCompatActivity {
         viewBinding = ActivityMeetingListBinding.inflate(getLayoutInflater());
         setContentView(viewBinding.getRoot());
         setUpRecyclerView();
+        setUpFilterByRoomSpinner();
         viewBinding.scheduleMeetingButton.setOnClickListener(this::startScheduleMeetingActivity);
         datePickerFragment = new DatePickerFragment(this::onMeetingFilteredByDate);
+    }
+
+    private void setUpFilterByRoomSpinner(){
+        filterByRoomSpinner = new Spinner(this, Spinner.MODE_DIALOG);
+        MeetingRoomSpinnerHelper.setUp(filterByRoomSpinner, this::onMeetingFilteredByRoom);
     }
 
     @Override
@@ -63,7 +70,9 @@ public class MeetingsListActivity extends AppCompatActivity {
     }
 
     private void onMeetingFilteredByDate(DatePicker view, int year, int month, int day){
-        final LocalDate date = LocalDate.of(year, month, day);
+        final LocalDate date = LocalDate.of(year, month + 1, day); // Add 1 to month because
+        // the callback will be called with month value (0-11) instead of (1-12) for compatibility
+        // with Calendar.MONTH. See the `DatePickerDialog.OnDateSetListener` documentation for more info.
         meetings.clear();
         meetings.addAll(scheduledMeetingRepository.getByDate(date));
         meetingsListAdapter.notifyDataSetChanged();
@@ -78,14 +87,11 @@ public class MeetingsListActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_toolbar, menu);
-        final Spinner roomSelector = (Spinner) menu.findItem(R.id.filter_by_room).getActionView();
-        roomSelector.setBackgroundColor(Color.WHITE);
-        roomSelector.setPadding(20,20, 20 ,20);
-        MeetingRoomSpinnerHelper.setUp(this, roomSelector, this::onMeetingFilteredByRoom);
         return super.onCreateOptionsMenu(menu);
     }
 
     private void onMeetingFilteredByRoom(MeetingRoomUniqueId roomUniqueId){
+        Log.i("Filter_test", roomUniqueId.toString());
         meetings.clear();
         meetings.addAll(scheduledMeetingRepository.getByRoom(roomUniqueId));
         meetingsListAdapter.notifyDataSetChanged();
@@ -93,15 +99,28 @@ public class MeetingsListActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.filter_by_date) {
-            datePickerFragment.show(getSupportFragmentManager(), "filter_date_picker");
-        }else if(item.getItemId() == R.id.reset_filter){
-            meetings.clear();
-            meetings.addAll(scheduledMeetingRepository.getAll());
-            meetingsListAdapter.notifyDataSetChanged();
+        switch (item.getItemId()) {
+            case R.id.filter_by_date:
+                datePickerFragment.show(getSupportFragmentManager(), "filter_date_picker");
+                break;
+            case R.id.reset_filter:
+                refreshMeetingList();
+                break;
+            case R.id.filter_by_room:
+                filterByRoomSpinner.performClick();
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + item.getItemId());
         }
         return super.onOptionsItemSelected(item);
     }
+
+    private void refreshMeetingList(){
+        meetings.clear();
+        meetings.addAll(scheduledMeetingRepository.getAll());
+        meetingsListAdapter.notifyDataSetChanged();
+    }
+
 
     @Subscribe
     public void onDeleteMeetingEvent(DeleteMeetingEvent event){
@@ -124,5 +143,10 @@ public class MeetingsListActivity extends AppCompatActivity {
     protected void onStop() {
         EventBus.getDefault().unregister(this);
         super.onStop();
+    }
+
+    @VisibleForTesting
+    public void refreshMeetingListForTesting(){
+        refreshMeetingList();
     }
 }
