@@ -1,12 +1,13 @@
 language: android
 dist: trusty
+os: linux
 jdk:
   - oraclejdk8
 
 env:
   global:
     - ANDROID_ABI=armeabi-v7a
-    - EMULATOR_API_LEVEL=android-24
+    - EMULATOR_API_LEVEL=android-30
 
 android:
   components:
