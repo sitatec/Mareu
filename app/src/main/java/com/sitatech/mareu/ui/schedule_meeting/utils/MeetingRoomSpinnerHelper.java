@@ -1,4 +1,4 @@
-package com.sitatech.mareu.ui.utils;
+package com.sitatech.mareu.ui.schedule_meeting.utils;
 
 import android.content.Context;
 import android.util.Log;
@@ -38,24 +38,10 @@ public abstract class MeetingRoomSpinnerHelper {
         });
     }
 
-    public static void setUp(Spinner spinner, OnItemSelectedListener onItemSelected){
-        final ArrayAdapter<String> adapter = setUpSpinnerAdapter(spinner.getContext());
-        spinner.setAdapter(adapter);
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Log.i("Filter_test", MEETING_ROOM_REPOSITORY.getAll().get(position).getUniqueId().toString() + "_helper");
-                if(--position < 0) return; // The first item is a "Hint"
-                onItemSelected.onSelect(MEETING_ROOM_REPOSITORY.getAll().get(position).getUniqueId());
-            }
-            @Override public void onNothingSelected(AdapterView<?> parent) {}
-        });
-    }
-
     private static ArrayAdapter<String> setUpSpinnerAdapter(Context context){
         final ArrayAdapter<String> adapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item){
             @Override public boolean isEnabled(int position) {
-                return position > 0; // The first item mustn't be selected because it is a "Hint".
+                return position > 0; // The first item must be disabled because it is a "Hint".
             }
         };
         adapter.add("Choisir la salle");
@@ -72,3 +58,18 @@ public abstract class MeetingRoomSpinnerHelper {
         return meetingRoomNames;
     }
 }
+
+
+//    public static void setUp(Spinner spinner, OnItemSelectedListener onItemSelected){
+//        final ArrayAdapter<String> adapter = setUpSpinnerAdapter(spinner.getContext());
+//        spinner.setAdapter(adapter);
+//        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                Log.i("Filter_test", MEETING_ROOM_REPOSITORY.getAll().get(position).getUniqueId().toString() + "_helper");
+//                if(--position < 0) return; // The first item is a "Hint"
+//                onItemSelected.onSelect(MEETING_ROOM_REPOSITORY.getAll().get(position).getUniqueId());
+//            }
+//            @Override public void onNothingSelected(AdapterView<?> parent) {}
+//        });
+//    }

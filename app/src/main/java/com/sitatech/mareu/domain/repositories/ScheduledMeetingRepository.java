@@ -26,8 +26,12 @@ public class ScheduledMeetingRepository {
         return scheduledMeetings.remove(meeting);
     }
 
+    public void clear(){
+        scheduledMeetings.clear();
+    }
+
     public List<Meeting> getAll() {
-        return scheduledMeetings;
+        return new ArrayList<>(scheduledMeetings);
     }
 
     public List<Meeting> getByDate(LocalDate date){
@@ -39,5 +43,4 @@ public class ScheduledMeetingRepository {
         final Predicate<Meeting> byRoom = meeting -> meeting.getRoomId().equals(roomId);
         return scheduledMeetings.stream().filter(byRoom).collect(Collectors.toList());
     }
-
 }

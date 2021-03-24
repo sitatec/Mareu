@@ -2,8 +2,10 @@ package com.sitatech.mareu.ui.meetings_list;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
+
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,19 +14,18 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.DatePicker;
-import android.widget.Spinner;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.sitatech.mareu.R;
 import com.sitatech.mareu.databinding.ActivityMeetingListBinding;
 import com.sitatech.mareu.domain.enums.MeetingRoomUniqueId;
 import com.sitatech.mareu.domain.exceptions.FreeTimeSlotReleaseAttempt;
+import com.sitatech.mareu.domain.models.MeetingRoom;
 import com.sitatech.mareu.domain.repositories.ScheduledMeetingRepository;
 import com.sitatech.mareu.events.DeleteMeetingEvent;
 import com.sitatech.mareu.domain.models.Meeting;
 import com.sitatech.mareu.ui.schedule_meeting.ScheduleMeetingActivity;
 import com.sitatech.mareu.ui.schedule_meeting.fragments.pickers.DatePickerFragment;
-import com.sitatech.mareu.ui.utils.MeetingRoomSpinnerHelper;
 import com.sitatech.mareu.utils.DependencyContainer;
 
 import org.greenrobot.eventbus.EventBus;
@@ -32,6 +33,7 @@ import org.greenrobot.eventbus.Subscribe;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class MeetingsListActivity extends AppCompatActivity {
@@ -41,7 +43,6 @@ public class MeetingsListActivity extends AppCompatActivity {
     private ActivityMeetingListBinding viewBinding;
     private MeetingsListAdapter meetingsListAdapter;
     private DatePickerFragment datePickerFragment;
-    private Spinner filterByRoomSpinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,15 +50,10 @@ public class MeetingsListActivity extends AppCompatActivity {
         viewBinding = ActivityMeetingListBinding.inflate(getLayoutInflater());
         setContentView(viewBinding.getRoot());
         setUpRecyclerView();
-        setUpFilterByRoomSpinner();
         viewBinding.scheduleMeetingButton.setOnClickListener(this::startScheduleMeetingActivity);
         datePickerFragment = new DatePickerFragment(this::onMeetingFilteredByDate);
     }
 
-    private void setUpFilterByRoomSpinner(){
-        filterByRoomSpinner = new Spinner(this, Spinner.MODE_DIALOG);
-        MeetingRoomSpinnerHelper.setUp(filterByRoomSpinner, this::onMeetingFilteredByRoom);
-    }
 
     @Override
     protected void onResume() {
@@ -107,12 +103,25 @@ public class MeetingsListActivity extends AppCompatActivity {
                 refreshMeetingList();
                 break;
             case R.id.filter_by_room:
-                filterByRoomSpinner.performClick();
+                showRoomSelectorDialog();
                 break;
             default:
                 throw new IllegalStateException("Unexpected value: " + item.getItemId());
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void showRoomSelectorDialog(){
+        List<MeetingRoomUniqueId> rooms = Arrays.asList(MeetingRoomUniqueId.values());
+        String[] dialogItems = rooms.stream().map(MeetingRoomUniqueId::toString).toArray(String[]::new);
+        new AlertDialog.Builder(this)
+                .setTitle("Choisissez la salle")
+                .setItems(dialogItems, (dialog, selectedItemIndex) -> {
+                        dialog.dismiss();
+                        final MeetingRoom selectedRoom =
+                                DependencyContainer.getMeetingRoomRepository().getAll().get(selectedItemIndex);
+                        onMeetingFilteredByRoom(selectedRoom.getUniqueId());
+                }).show();
     }
 
     private void refreshMeetingList(){

@@ -21,7 +21,7 @@ import com.sitatech.mareu.domain.utils.MeetingScheduler;
 import com.sitatech.mareu.ui.schedule_meeting.fragments.pickers.DatePickerFragment;
 import com.sitatech.mareu.ui.schedule_meeting.fragments.pickers.DurationPickerFragment;
 import com.sitatech.mareu.ui.schedule_meeting.fragments.pickers.TimePickerFragment;
-import com.sitatech.mareu.ui.utils.MeetingRoomSpinnerHelper;
+import com.sitatech.mareu.ui.schedule_meeting.utils.MeetingRoomSpinnerHelper;
 import com.sitatech.mareu.utils.DependencyContainer;
 
 import java.time.Duration;
@@ -30,6 +30,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 
 import top.defaults.colorpicker.ColorPickerPopup;
@@ -76,7 +77,7 @@ public class ScheduleMeetingActivity extends AppCompatActivity {
         viewBinding.submit.setOnClickListener(this::schedule);
     }
 
-    private void setUpMeetingRoomSelector(){
+    private void setUpMeetingRoomSelector() {
         MeetingRoomSpinnerHelper.setUp(viewBinding.meetingRoomSelector,
                 roomId -> meetingRoomId = roomId,
                 () -> viewBinding.meetingRoomErrorHint.setVisibility(View.VISIBLE)
@@ -84,41 +85,41 @@ public class ScheduleMeetingActivity extends AppCompatActivity {
     }
 
 
-    private void showTimePicker(View v){
+    private void showTimePicker(View v) {
         timePickerFragment.show(getSupportFragmentManager(), "meeting_start_time_picker");
     }
 
-    private void onOnMeetingTimeSet(TimePicker view, int hourOfDay, int minute){
-        meetingStartTime = LocalTime.of(hourOfDay,minute);
+    private void onOnMeetingTimeSet(TimePicker view, int hourOfDay, int minute) {
+        meetingStartTime = LocalTime.of(hourOfDay, minute);
         final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH'h'mm");
         viewBinding.timePickerAction.setText(meetingStartTime.format(formatter));
         viewBinding.timePickerAction.setError(null);// Remove the error hint if it was set
     }
 
-    private void showDatePicker(View v){
+    private void showDatePicker(View v) {
         datePickerFragment.show(getSupportFragmentManager(), "meeting_date_picker");
     }
 
-    private void onMeetingDateSet(DatePicker view, int year, int month, int day){
+    private void onMeetingDateSet(DatePicker view, int year, int month, int day) {
         meetingDate = LocalDate.of(year, month, day);
         final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         viewBinding.datePickerAction.setText(meetingDate.format(formatter));
         viewBinding.datePickerAction.setError(null);// Remove the error hint if it was set
     }
 
-    private void showDurationPicker(View v){
+    private void showDurationPicker(View v) {
         durationPickerFragment.show(getSupportFragmentManager(), "meeting_duration_picker");
     }
 
-    private void onMeetingDurationSet(Duration duration){
+    private void onMeetingDurationSet(Duration duration) {
         meetingDuration = duration;
-        viewBinding.durationPickerAction.setText(duration.toHours() + " heures et " + duration.toMinutes() + " minutes");
+        viewBinding.durationPickerAction.setText(String.format(Locale.FRENCH, "%d heures et %d minutes", duration.toHours(), duration.toMinutes()));
         viewBinding.durationPickerAction.setError(null);// Remove the error hint if it was set
     }
 
-    private void addNewParticipant(View v){
+    private void addNewParticipant(View v) {
         String participantEmail = viewBinding.participantEmailEdit.getText().toString();
-        if(!participantEmail.isEmpty() && participantEmails.add(participantEmail)) {
+        if (!participantEmail.isEmpty() && participantEmails.add(participantEmail)) {
             if (participantEmails.size() > 1)
                 participantEmail = ", " + participantEmail;
             viewBinding.addedParticipantEmailsContainer.append(participantEmail);
@@ -126,8 +127,8 @@ public class ScheduleMeetingActivity extends AppCompatActivity {
         }
     }
 
-    private void schedule(View v){
-        if(validateForm()) {
+    private void schedule(View v) {
+        if (validateForm()) {
             final String meetingSubject = viewBinding.meetingSubjectEdit.getText().toString();
             final LocalDateTime meetingDateTime = LocalDateTime.of(meetingDate, meetingStartTime);
             final TimeSlot meetingSlot = new TimeSlot(meetingDateTime, meetingDuration);
@@ -141,33 +142,38 @@ public class ScheduleMeetingActivity extends AppCompatActivity {
         }
     }
 
-    private boolean validateForm(){
+    private boolean validateForm() {
         boolean isValid = true;
-        if(meetingRoomId == null) {
+        if (meetingRoomId == null) {
             isValid = false;
             viewBinding.meetingRoomErrorHint.setVisibility(View.VISIBLE);
-        }if( meetingDate == null ){
+        }
+        if (meetingDate == null) {
             isValid = false;
             indicateError(viewBinding.datePickerAction);
-        } if(meetingStartTime == null) {
+        }
+        if (meetingStartTime == null) {
             isValid = false;
             indicateError(viewBinding.timePickerAction);
-        }if(meetingDuration == null || meetingDuration.isZero()){
+        }
+        if (meetingDuration == null || meetingDuration.isZero()) {
             isValid = false;
             indicateError(viewBinding.durationPickerAction);
-        }if(viewBinding.meetingSubjectEdit.getText().toString().isEmpty()){
+        }
+        if (viewBinding.meetingSubjectEdit.getText().toString().isEmpty()) {
             isValid = false;
             indicateError(viewBinding.meetingSubjectEdit);
-        }if(participantEmails.size() < 2){
+        }
+        if (participantEmails.size() < 2) {
             isValid = false;
-            viewBinding.participantEmailEdit.setError(getString(R.string.required_field_error_msg));
-            viewBinding.participantEmailEdit.setHint("Minimum 2 participants");
+            viewBinding.participantEmailEdit.setError(getString(R.string.participant_emails_field_error_msg));
+            viewBinding.participantEmailEdit.setHint(R.string.participant_emails_field_error_msg);
             viewBinding.participantEmailEdit.setHintTextColor(Color.RED);
         }
         return isValid;
     }
 
-    private void indicateError(EditText editText){
+    private void indicateError(EditText editText) {
         final String errorMessage = getString(R.string.required_field_error_msg);
         editText.setError(errorMessage);
         editText.setHint(errorMessage);
@@ -175,9 +181,9 @@ public class ScheduleMeetingActivity extends AppCompatActivity {
 //        editText.setTextSize(12);
     }
 
-    private void showColorPicker(View v){
+    private void showColorPicker(View v) {
         new ColorPickerPopup.Builder(this)
-                .initialColor(R.color.default_meeting_color).enableBrightness(false)
+                .initialColor(getResources().getColor(R.color.default_meeting_color)).enableBrightness(false)
                 .enableAlpha(true).okTitle("Choisir")
                 .cancelTitle("Annuler").showValue(false)
                 .build()

@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.sitatech.mareu.databinding.MeetingRecyclerviewItemBinding;
 import com.sitatech.mareu.events.DeleteMeetingEvent;
-import com.sitatech.mareu.events.DisplayMeetingEvent;
 import com.sitatech.mareu.domain.models.Meeting;
 
 import org.greenrobot.eventbus.EventBus;
@@ -55,16 +54,12 @@ public class MeetingsListAdapter extends RecyclerView.Adapter<MeetingsListAdapte
             itemBinding.meetingSubtitle.setText(currentMeeting.getSubtitle());
             itemBinding.meetingColor.setCardBackgroundColor(currentMeeting.getColor());
             itemBinding.deleteMeeting.setOnClickListener(view -> emitMeetingDeletionEvent(currentMeeting));
-            itemView.setOnClickListener(view -> emitMeetingDisplayingEvent(currentMeeting));
         }
 
         private void emitMeetingDeletionEvent(Meeting meeting){
             EventBus.getDefault().post(new DeleteMeetingEvent(meeting));
         }
 
-        private void emitMeetingDisplayingEvent(Meeting meeting){
-            EventBus.getDefault().post(new DisplayMeetingEvent(meeting));
-        }
     }
 
 }

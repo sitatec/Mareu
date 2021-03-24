@@ -1,10 +1,8 @@
 package com.sitatech.mareu.meetings_list;
 
 
-import android.util.Log;
 import android.widget.DatePicker;
 
-import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.contrib.PickerActions;
 import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.espresso.intent.Intents;
@@ -22,7 +20,7 @@ import com.sitatech.mareu.ui.meetings_list.MeetingsListActivity;
 import com.sitatech.mareu.ui.schedule_meeting.ScheduleMeetingActivity;
 import com.sitatech.mareu.utils.DependencyContainer;
 
-import org.junit.Assert;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -37,7 +35,6 @@ import java.util.Set;
 
 import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
 import static androidx.test.espresso.Espresso.openContextualActionModeOverflowMenu;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
@@ -54,21 +51,20 @@ import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
 
 @RunWith(AndroidJUnit4.class)
 public class MeetingListActivityTest {
 
-    private MeetingScheduler meetingScheduler;
-    private ScheduledMeetingRepository scheduledMeetingRepository;
+    private final MeetingScheduler meetingScheduler = DependencyContainer.getMeetingScheduler();;
+    private final ScheduledMeetingRepository scheduledMeetingRepository = DependencyContainer.getScheduledMeetingRepository();
 
     @Rule
     public final ActivityScenarioRule<MeetingsListActivity> activityScenarioRule = new ActivityScenarioRule<>(MeetingsListActivity.class);
 
-    @Before
-    public void init(){
-        meetingScheduler = DependencyContainer.getMeetingScheduler();
-        scheduledMeetingRepository = DependencyContainer.getScheduledMeetingRepository();
+    @After
+    public void reset(){
+        scheduledMeetingRepository.clear();
+        DependencyContainer.getMeetingRoomRepository().reset();
     }
 
     @Test
@@ -139,16 +135,6 @@ public class MeetingListActivityTest {
                 .check(withItemCount(scheduledMeetingRepository.getByRoom(MeetingRoomUniqueId.A).size()));
     }
 
-//    @Test
-//    public void should_display_filters_menu(){
-////        onView(withId(R.id.filter_by_date)).check(matches(not(isDisplayed())));
-////        onView(withId(R.id.filter_by_room)).check(matches(not(isDisplayed())));
-////        onView(withId(R.id.reset_filter)).check(matches(not(isDisplayed())));
-//        openContextualActionModeOverflowMenu();
-////        onView(withText(R.string.menu_action_filter_by_date_txt)).check(matches(isDisplayed()));
-////        onView(withId(R.string.menu_action_filter_by_room_txt)).check(matches(isDisplayed()));
-//        onView(withId(R.string.menu_action_reset_filters_txt)).check(matches(isDisplayed()));
-//    }
 
     ////////////////////// ::::::::: Utils methods :::::::::: ////////////////////////
 

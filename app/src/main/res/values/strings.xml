@@ -14,4 +14,15 @@
     <string name="menu_action_filter_by_date_txt">Filtrer par date</string>
     <string name="menu_action_filter_by_room_txt">Filtrer par salle</string>
     <string name="menu_action_reset_filters_txt">Réinitialiser le filtre</string>
+    <string name="participant_emails_field_error_msg">Minimum 2 participants</string>
+    <string name="room_selector_error_text">Veillez selectionez une salle</string>
+    <string name="date_picker_action_hint">Date de la réunion</string>
+    <string name="time_picker_action_hint">L\'heure de début</string>
+    <string name="meeting_subject_edit_text_hint">Sujet de la réunion</string>
+    <string name="duration_picker_action_hint">Durée</string>
+    <string name="color_picker_action_hint">Choisissez une couleur</string>
+    <string name="participant_emails_edit_text_hint">Participant</string>
+    <string name="add_participant_email_btn_text">Ajouter</string>
+    <string name="added_participant_emails">Emails des participants:</string>
+    <string name="submit_button_text">Planifier</string>
 </resources>

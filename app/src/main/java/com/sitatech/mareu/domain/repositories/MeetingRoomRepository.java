@@ -30,4 +30,9 @@ public class MeetingRoomRepository {
     public List<MeetingRoom> getAll(){
         return new ArrayList<>(meetingRooms.values());
     }
+
+    public void reset(){
+        meetingRooms.clear();
+        initializeMeetingRooms();
+    }
 }
