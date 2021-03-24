@@ -6,7 +6,7 @@ jdk:
 env:
   global:
     - ANDROID_ABI=armeabi-v7a
-    - ANDROID_TARGET=android-29
+    - EMULATOR_API_LEVEL=android-24
 
 android:
   components:
@@ -14,20 +14,20 @@ android:
     - tools
     - platform-tools
     - build-tools-30.0.3
-    - $ANDROID_TARGET
-    - sys-img-${ANDROID_ABI}-${ANDROID_TARGET}
+    - android-30
+    - sys-img-${ANDROID_ABI}-${EMULATOR_API_LEVEL}
 
 before_install:
-  - yes | sdkmanager "platforms;android-29"
+  - yes | sdkmanager "platforms;android-30"
 
 script:
   - chmod +x gradlew
   - ./gradlew build jacocoTestReport assembleAndroidTest
-  - echo no | android create avd --force -n test -t $ANDROID_TARGET --abi $ANDROID_ABI
+  - echo no | android create avd --force -n test -t $EMULATOR_API_LEVEL --abi $ANDROID_ABI
   - emulator -avd test -no-skin -no-audio -no-window &
   - android-wait-for-emulator
   - adb shell setprop dalvik.vm.dexopt-flags v=n,o=v
   - ./gradlew connectedCheck
 
-after_success:
+after_script:
   - bash <(curl -s https://codecov.io/bash)

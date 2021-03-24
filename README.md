@@ -1,2 +1,2 @@
 # Mareu
-[![Build Status](https://travis-ci.com/sitatec/Mareu.svg?branch=main)](https://travis-ci.com/sitatec/Mareu)
+[![Build Status](https://travis-ci.com/sitatec/Mareu.svg?branch=main)](https://travis-ci.com/sitatec/Mareu)  [![codecov](https://codecov.io/gh/sitatec/Mareu/branch/main/graph/badge.svg?token=V9EXZNO6I7)](https://codecov.io/gh/sitatec/Mareu)
