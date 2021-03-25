@@ -6,8 +6,8 @@ jdk:
 
 env:
   global:
-    - ANDROID_ABI=x86
-    - EMULATOR_API_LEVEL=android-26
+    - ANDROID_ABI=armeabi-v7a
+    - EMULATOR_API_LEVEL=android-22
 
 android:
   components:
