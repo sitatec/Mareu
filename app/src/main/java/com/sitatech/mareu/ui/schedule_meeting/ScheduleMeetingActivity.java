@@ -46,7 +46,7 @@ public class ScheduleMeetingActivity extends AppCompatActivity {
     private DatePickerFragment datePickerFragment;
     private TimePickerFragment timePickerFragment;
     private DurationPickerFragment durationPickerFragment;
-    private Set<String> participantEmails = new HashSet<>();
+    private final Set<String> participantEmails = new HashSet<>();
     private int color = R.color.default_meeting_color;
 
 
@@ -148,6 +148,21 @@ public class ScheduleMeetingActivity extends AppCompatActivity {
             isValid = false;
             viewBinding.meetingRoomErrorHint.setVisibility(View.VISIBLE);
         }
+        if (viewBinding.meetingSubjectEdit.getText().toString().isEmpty()) {
+            isValid = false;
+            indicateError(viewBinding.meetingSubjectEdit);
+        }
+        if (participantEmails.size() < 2) {
+            isValid = false;
+            viewBinding.participantEmailEdit.setError(getString(R.string.participant_emails_field_error_msg));
+            viewBinding.participantEmailEdit.setHint(R.string.participant_emails_field_error_msg);
+            viewBinding.participantEmailEdit.setHintTextColor(Color.RED);
+        }
+        return isValid || arePickerFieldsValid();
+    }
+
+    public boolean arePickerFieldsValid(){
+        boolean isValid = true;
         if (meetingDate == null) {
             isValid = false;
             indicateError(viewBinding.datePickerAction);
@@ -159,16 +174,6 @@ public class ScheduleMeetingActivity extends AppCompatActivity {
         if (meetingDuration == null || meetingDuration.isZero()) {
             isValid = false;
             indicateError(viewBinding.durationPickerAction);
-        }
-        if (viewBinding.meetingSubjectEdit.getText().toString().isEmpty()) {
-            isValid = false;
-            indicateError(viewBinding.meetingSubjectEdit);
-        }
-        if (participantEmails.size() < 2) {
-            isValid = false;
-            viewBinding.participantEmailEdit.setError(getString(R.string.participant_emails_field_error_msg));
-            viewBinding.participantEmailEdit.setHint(R.string.participant_emails_field_error_msg);
-            viewBinding.participantEmailEdit.setHintTextColor(Color.RED);
         }
         return isValid;
     }

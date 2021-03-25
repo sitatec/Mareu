@@ -1,2 +1,2 @@
 # Mareu
-[![Build Status](https://travis-ci.com/sitatec/Mareu.svg?branch=main)](https://travis-ci.com/sitatec/Mareu)  [![codecov](https://codecov.io/gh/sitatec/Mareu/branch/main/graph/badge.svg?token=V9EXZNO6I7)](https://codecov.io/gh/sitatec/Mareu)
+[![Build Status](https://travis-ci.com/sitatec/Mareu.svg?branch=main)](https://travis-ci.com/sitatec/Mareu)  [![codecov](https://codecov.io/gh/sitatec/Mareu/branch/main/graph/badge.svg?token=V9EXZNO6I7)](https://codecov.io/gh/sitatec/Mareu)  [![Maintainability](https://api.codeclimate.com/v1/badges/71c4f29a76d074615c63/maintainability)](https://codeclimate.com/github/sitatec/Mareu/maintainability)
