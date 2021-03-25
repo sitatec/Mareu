@@ -15,22 +15,28 @@ android:
     - tools
     - platform-tools
     - build-tools-30.0.3
-    - android-22
+    - android-30
+    - $EMULATOR_API_LEVEL
     - sys-img-${ANDROID_ABI}-${EMULATOR_API_LEVEL}
 
 before_install:
-  - yes | sdkmanager "platforms;android-22"
   - yes | sdkmanager "platforms;android-30"
 
 script:
   - chmod +x gradlew
-  - ./gradlew build jacocoTestReport assembleAndroidTest
-  - echo no | android create avd --force -n test -t $EMULATOR_API_LEVEL --abi $ANDROID_ABI
+  - echo no | android create avd --force -n test -t $EMULATOR_API_LEVEL --abi $ANDROID_ABI --device 'Nexus 4'
   - emulator -avd test -skin 768x1280 -no-audio -no-window &
   - android-wait-for-emulator
-  - ./gradlew connectedCheck
+  - ./gradlew connectedAndroidTest jacocoTestReport
+
+before_cache:
+  - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+cache:
+  directories:
+    - $HOME/.gradle/caches/
+    - $HOME/.gradle/wrapper/
+    - $HOME/.android/build-cache
 
 after_success:
-  - bash <(curl -s https://codecov.io/bash)
-after_failure:
   - bash <(curl -s https://codecov.io/bash)

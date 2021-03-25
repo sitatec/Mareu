@@ -3,6 +3,7 @@ package com.sitatech.mareu.schedule_meeting;
 import android.content.res.Resources;
 
 import androidx.test.core.app.ApplicationProvider;
+import androidx.test.espresso.matcher.RootMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
@@ -26,6 +27,7 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.assertThat;
 import static androidx.test.espresso.matcher.ViewMatchers.hasErrorText;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.withHint;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
@@ -64,29 +66,46 @@ public class ScheduleMeetingActivityTest {
         final String participantEmailFieldErrorMsg = resources.getString(R.string.participant_emails_field_error_msg);
         // Check that error indicators are not displayed
         onView(withId(R.id.meeting_room_error_hint)).check(matches(not(isDisplayed())));
-        onView(withId(R.id.date_picker_action)).check(matches(not(hasErrorText(fieldsErrorMsg))));
-        onView(withId(R.id.time_picker_action)).check(matches(not(hasErrorText(fieldsErrorMsg))));
-        onView(withId(R.id.duration_picker_action)).check(matches(not(hasErrorText(fieldsErrorMsg))));
+        onView(withId(R.id.date_picker_action)).check(matches(not(withHint(fieldsErrorMsg))));
+        onView(withId(R.id.time_picker_action)).check(matches(not(withHint(fieldsErrorMsg))));
+        onView(withId(R.id.duration_picker_action)).check(matches(not(withHint(fieldsErrorMsg))));
         onView(withId(R.id.meeting_subject_edit)).check(matches(not(hasErrorText(fieldsErrorMsg))));
         onView(withId(R.id.participant_email_edit)).check(matches(not(hasErrorText(participantEmailFieldErrorMsg))));
         // Try to submit the form
         onView(withId(R.id.submit)).perform(click());
-        // Check that error indicators are displayed
+        // Check that error indicators are displayed for pickers
         onView(withId(R.id.meeting_room_error_hint)).check(matches(isDisplayed()));
-        onView(withId(R.id.date_picker_action)).check(matches(hasErrorText(fieldsErrorMsg)));
-        onView(withId(R.id.time_picker_action)).check(matches(hasErrorText(fieldsErrorMsg)));
-        onView(withId(R.id.duration_picker_action)).check(matches(hasErrorText(fieldsErrorMsg)));
+        onView(withId(R.id.date_picker_action)).check(matches(withHint(fieldsErrorMsg)));
+        onView(withId(R.id.time_picker_action)).check(matches(withHint(fieldsErrorMsg)));
+        onView(withId(R.id.duration_picker_action)).check(matches(withHint(fieldsErrorMsg)));
+        // Check that error indicators are displayed for normal EditTexts
         onView(withId(R.id.meeting_subject_edit)).check(matches(hasErrorText(fieldsErrorMsg)));
+        onView(withId(R.id.meeting_subject_edit)).check(matches(withHint(fieldsErrorMsg)));
         onView(withId(R.id.participant_email_edit)).check(matches(hasErrorText(participantEmailFieldErrorMsg)));
+        onView(withId(R.id.participant_email_edit)).check(matches(withHint(participantEmailFieldErrorMsg)));
     }
+
+//    @Test
+//    public void error_hint_should_be_visible_when_the_meeting_room_spinner_is_closed_without_choosing_a_room(){
+//        onView(withId(R.id.meeting_room_error_hint)).check(matches(not(isDisplayed())));
+//
+//        // open de dropdown
+//        onView(withId(R.id.meeting_room_selector)).perform(click());
+//        // click on an other view to close the spinner without selecting a item
+//        onView(withId(R.id.participant_email_edit)).perform(click());
+//
+//        onView(withId(R.id.meeting_room_error_hint)).check(matches(isDisplayed()));
+//    }
+
 
     @Test
     public void participant_email_edit_text_should_have_an_error_hint_if_the_participants_are_less_than_2(){
         final String participantEmailFieldErrorMsg = resources.getString(R.string.participant_emails_field_error_msg);
         // add a participant
-        onView(withId(R.id.participant_email_edit)).perform(typeText("espresso@test.ts"));
+        onView(withId(R.id.participant_email_edit)).perform(typeText("espresso@test.ts"), closeSoftKeyboard());
         onView(withId(R.id.add_participant_button)).perform(click());
-        onView(withId(R.id.participant_email_edit)).check(matches(not(hasErrorText(participantEmailFieldErrorMsg))));
+        onView(withId(R.id.submit)).perform(click());
+        onView(withId(R.id.participant_email_edit)).check(matches(hasErrorText(participantEmailFieldErrorMsg)));
     }
 
     @Test
@@ -109,7 +128,7 @@ public class ScheduleMeetingActivityTest {
     }
 
     @Test
-    public void should_schedule_a_meeting() throws InterruptedException {
+    public void should_schedule_a_meeting() {
         assertThat(DependencyContainer.getScheduledMeetingRepository().getAll(), empty());
         fillFormFields();
         onView(withId(R.id.submit)).perform(click());
@@ -138,11 +157,13 @@ public class ScheduleMeetingActivityTest {
     private void fillFormFields(){
         onView(withId(R.id.meeting_room_selector)).perform(click());
         onView(withText(MeetingRoomUniqueId.A.toString())).perform(click());
-        // select the default values of the date and the time picker
+        // select the default values of the date, time and color pickers
         onView(withId(R.id.date_picker_action)).perform(click());
         onView(withId(android.R.id.button1)).perform(click());
         onView(withId(R.id.time_picker_action)).perform(click());
         onView(withId(android.R.id.button1)).perform(click());
+        onView(withId(R.id.color_picker_action)).perform(click());
+        onView(withId(top.defaults.colorpicker.R.id.ok)).inRoot(RootMatchers.isPlatformPopup()).perform(click());
         // select the duration
         onView(withId(R.id.duration_picker_action)).perform(click());
         onView(withId(R.id.minutes_picker)).perform(swipeUp());

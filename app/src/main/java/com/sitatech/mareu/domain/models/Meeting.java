@@ -23,19 +23,19 @@ public class Meeting {
     public Meeting(){}
 
     public Meeting(Set<String> participantEmails, TimeSlot timeSlot, MeetingRoomUniqueId roomId, String subject, int color) {
-        this.participantEmails = participantEmails;
-        this.timeSlot = timeSlot;
-        this.roomId = roomId;
-        this.subject = subject;
-        this.color = color;
+        setParticipantEmails(participantEmails);
+        setTimeSlot(timeSlot);
+        setRoomId(roomId);
+        setSubject(subject);
+        setColor(color);
     }
 
     public Meeting(Set<String> participantEmails, TimeSlot timeSlot, MeetingRoomUniqueId roomId, String subject) {
-        this.participantEmails = participantEmails;
-        this.timeSlot = timeSlot;
-        this.roomId = roomId;
-        this.subject = subject;
-        this.color = R.color.default_meeting_color;
+        setParticipantEmails(participantEmails);
+        setTimeSlot(timeSlot);
+        setRoomId(roomId);
+        setSubject(subject);
+        setColor(0xF8FFBF00);
     }
 
     public Set<String> getParticipantEmails() {
@@ -79,11 +79,11 @@ public class Meeting {
     }
 
     public String getTitle(){
-        return joinStrings(" - ", roomId.toString(), getFormattedTime(), subject);
+        return joinStrings(" - ", roomId.toString(), getFormattedTime(), getSubject());
     }
 
     public String getSubtitle(){
-        return joinStrings(", ", participantEmails.toArray(new String[0]));
+        return joinStrings(", ", getParticipantEmails().toArray(new String[0]));
     }
 
     public String getFormattedTime(){

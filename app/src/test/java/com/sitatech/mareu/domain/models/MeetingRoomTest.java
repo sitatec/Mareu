@@ -88,7 +88,13 @@ public class MeetingRoomTest {
         assertEquals(meetingRoom.getAllReservedSlots().size(), 1);
     }
 
-    ///////////////////// MeetingRoom.getAllReservedSlots() ///////////////////////
+    @Test
+    public void should_throw_a_FreeTimeSlotReleaseAttempt_when_the_given_slot_is_already_free(){
+        final TimeSlot nonReservedTimeSlot = new TimeSlot(LocalDateTime.now(), Duration.ofHours(1));
+        assertThrows(FreeTimeSlotReleaseAttempt.class, () -> meetingRoom.release(nonReservedTimeSlot));
+    }
+
+        ///////////////////// MeetingRoom.getAllReservedSlots() ///////////////////////
 
     @Test
     public void should_return_all_reserved_time_slot() throws TimeSlotOverlapException {

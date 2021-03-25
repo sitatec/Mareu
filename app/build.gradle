@@ -10,8 +10,12 @@ jacoco {
 
 tasks.withType(Test) {
     jacoco.includeNoLocationClasses = true
-    jacoco.excludes = ['jdk.internal.*']
+    jacoco.excludes = ['jdk.internal.*', 'com.sitatech.mareu.databinding']
 }
+//
+//tasks.withType(JacocoTestReport){
+//    jacoco.excludes = ['jdk.internal.*', 'com.sitatech.mareu.databinding']
+//}
 
 android {
     compileSdkVersion 30
@@ -47,6 +51,13 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
+    testOptions {
+        animationsDisabled true
+
+        unitTests {
+            includeAndroidResources = true
+        }
+    }
 }
 
 dependencies {

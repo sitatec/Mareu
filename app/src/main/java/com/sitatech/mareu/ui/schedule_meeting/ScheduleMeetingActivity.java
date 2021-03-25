@@ -163,7 +163,7 @@ public class ScheduleMeetingActivity extends AppCompatActivity {
       viewBinding.participantEmailEdit.setHint(R.string.participant_emails_field_error_msg);
       viewBinding.participantEmailEdit.setHintTextColor(Color.RED);
     }
-    return isValid || arePickerFieldsValid();
+    return arePickerFieldsValid() && isValid;
   }
 
   public boolean arePickerFieldsValid() {
@@ -185,10 +185,9 @@ public class ScheduleMeetingActivity extends AppCompatActivity {
 
   private void indicateError(EditText editText) {
     final String errorMessage = getString(R.string.required_field_error_msg);
-    editText.setError(errorMessage);
     editText.setHint(errorMessage);
     editText.setHintTextColor(Color.RED);
-    //        editText.setTextSize(12);
+    editText.setError(errorMessage);
   }
 
   private void showColorPicker(View v) {
@@ -196,8 +195,8 @@ public class ScheduleMeetingActivity extends AppCompatActivity {
         .initialColor(getResources().getColor(R.color.default_meeting_color))
         .enableBrightness(false)
         .enableAlpha(true)
-        .okTitle("Choisir")
-        .cancelTitle("Annuler")
+        .okTitle(getString(R.string.choose_color))
+        .cancelTitle(getString(R.string.cancel_choosing_color))
         .showValue(false)
         .build()
         .show(
