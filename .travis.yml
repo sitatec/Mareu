@@ -7,7 +7,7 @@ jdk:
 env:
   global:
     - ANDROID_ABI=armeabi-v7a
-    - EMULATOR_API_LEVEL=android-24
+    - EMULATOR_API_LEVEL=android-22
 
 android:
   components:
@@ -19,7 +19,7 @@ android:
     - sys-img-${ANDROID_ABI}-${EMULATOR_API_LEVEL}
 
 before_install:
-  - yes | sdkmanager "platforms;android-24"
+  - yes | sdkmanager "platforms;android-22"
   - yes | sdkmanager "platforms;android-30"
 
 script:
