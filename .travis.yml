@@ -15,7 +15,7 @@ android:
     - tools
     - platform-tools
     - build-tools-30.0.3
-    - android-30
+    - android-22
     - sys-img-${ANDROID_ABI}-${EMULATOR_API_LEVEL}
 
 before_install:
