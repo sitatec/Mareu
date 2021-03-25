@@ -15,7 +15,7 @@ android:
     - tools
     - platform-tools
     - build-tools-30.0.3
-    - $EMULATOR_API_LEVEL
+    - android-30
     - sys-img-${ANDROID_ABI}-${EMULATOR_API_LEVEL}
 
 before_install:
@@ -26,7 +26,7 @@ script:
   - chmod +x gradlew
   - ./gradlew build jacocoTestReport assembleAndroidTest
   - echo no | android create avd --force -n test -t $EMULATOR_API_LEVEL --abi $ANDROID_ABI
-  - emulator -avd test -no-skin -no-audio &
+  - emulator -avd test -skin 768x1280 -no-audio -no-window &
   - android-wait-for-emulator
   - ./gradlew connectedCheck
 
