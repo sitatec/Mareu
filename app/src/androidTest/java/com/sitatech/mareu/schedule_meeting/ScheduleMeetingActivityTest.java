@@ -61,7 +61,7 @@ public class ScheduleMeetingActivityTest {
     }
 
     @Test
-    public void when_submitting_the_form_required_fields_that_are_empty_should_have_error_indicator(){
+    public void when_submitting_the_form_required_fields_that_are_empty_should_have_error_indicator() throws InterruptedException {
         final String fieldsErrorMsg = resources.getString(R.string.required_field_error_msg);
         final String participantEmailFieldErrorMsg = resources.getString(R.string.participant_emails_field_error_msg);
         // Check that error indicators are not displayed
@@ -72,6 +72,7 @@ public class ScheduleMeetingActivityTest {
         onView(withId(R.id.meeting_subject_edit)).check(matches(not(hasErrorText(fieldsErrorMsg))));
         onView(withId(R.id.participant_email_edit)).check(matches(not(hasErrorText(participantEmailFieldErrorMsg))));
         // Try to submit the form
+        Thread.sleep(1000); // waiting for the end of animation for emulators on travis ci
         onView(withId(R.id.submit)).perform(click());
         // Check that error indicators are displayed for pickers
         onView(withId(R.id.meeting_room_error_hint)).check(matches(isDisplayed()));
@@ -136,18 +137,20 @@ public class ScheduleMeetingActivityTest {
     }
 
     @Test
-    public void should_show_success_message_in_a_snack_bar(){
+    public void should_show_success_message_in_a_snack_bar() throws InterruptedException {
         final String message = resources.getString(R.string.meeting_scheduled_successfully_msg);
         fillFormFields();
+        Thread.sleep(1000); // waiting for the end of animation for emulators on travis ci
         onView(withId(R.id.submit)).perform(click());
         onView(allOf(withId(com.google.android.material.R.id.snackbar_text), withText(message)))
                 .check(matches(isDisplayed()));
     }
 
     @Test
-    public void should_show_time_slot_overlap_message_in_a_snack_bar(){
+    public void should_show_time_slot_overlap_message_in_a_snack_bar() throws InterruptedException {
         final String message = resources.getString(R.string.time_slot_overlaps_msg);
         fillFormFields();
+        Thread.sleep(1000); // waiting for the end of animation for emulators on travis ci
         onView(withId(R.id.submit)).perform(click());
         onView(withId(R.id.submit)).perform(click());// trying to schedule existing meeting.
         onView(allOf(withId(com.google.android.material.R.id.snackbar_text), withText(message)))
