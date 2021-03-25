@@ -26,7 +26,7 @@ script:
   - chmod +x gradlew
   - ./gradlew build jacocoTestReport assembleAndroidTest
   - echo no | android create avd --force -n test -t $EMULATOR_API_LEVEL --abi $ANDROID_ABI
-  - emulator -avd test -no-skin -no-audio -no-window &
+  - emulator -avd test -no-skin -no-audio &
   - android-wait-for-emulator
   - ./gradlew connectedCheck
 
