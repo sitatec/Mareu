@@ -25,4 +25,6 @@
     <string name="add_participant_email_btn_text">Ajouter</string>
     <string name="added_participant_emails">Emails des participants:</string>
     <string name="submit_button_text">Planifier</string>
+    <string name="choose_color">Choisir</string>
+    <string name="cancel_choosing_color">Annuler</string>
 </resources>

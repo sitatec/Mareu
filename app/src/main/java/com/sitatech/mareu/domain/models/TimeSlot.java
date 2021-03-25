@@ -10,13 +10,13 @@ public class TimeSlot {
     private Duration duration;
 
     public TimeSlot(LocalDateTime startTime, Duration duration) {
-        this.startTime = startTime;
-        this.duration = duration;
+        setStartTime(startTime);
+        setDuration(duration);
     }
 
     public TimeSlot(LocalDateTime startTime) {
-        this.startTime = startTime;
-        this.duration = DEFAULT_DURATION;
+        setStartTime(startTime);
+        setDuration(DEFAULT_DURATION);
     }
 
     public LocalDateTime getStartTime() {
@@ -36,11 +36,11 @@ public class TimeSlot {
     }
 
     public LocalDateTime getEndTime(){
-        return startTime.plus(duration);
+        return getStartTime().plus(getDuration());
     }
 
     public boolean overlapsWith(TimeSlot otherSlot){
-        return this.startTime.isBefore(otherSlot.getEndTime())
-                && otherSlot.startTime.isBefore(this.getEndTime());
+        return this.getStartTime().isBefore(otherSlot.getEndTime())
+                && otherSlot.getStartTime().isBefore(this.getEndTime());
     }
 }
