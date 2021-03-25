@@ -7,7 +7,7 @@ jdk:
 env:
   global:
     - ANDROID_ABI=armeabi-v7a
-    - EMULATOR_API_LEVEL=android-22
+    - EMULATOR_API_LEVEL=android-19
 
 android:
   components:
@@ -27,9 +27,9 @@ script:
   - echo no | android create avd --force -n test -t $EMULATOR_API_LEVEL --abi $ANDROID_ABI --device 'Nexus 4'
   - emulator -avd test -skin 768x1280 -no-audio -no-window &
   - android-wait-for-emulator
-  - adb shell settings put global window_animation_scale 0 &
-  - adb shell settings put global transition_animation_scale 0 &
-  - adb shell settings put global animator_duration_scale 0 &
+#  - adb shell settings put global window_animation_scale 0 &
+#  - adb shell settings put global transition_animation_scale 0 &
+#  - adb shell settings put global animator_duration_scale 0 &
   - adb shell input keyevent 82 &
   - ./gradlew connectedAndroidTest jacocoTestReport
 
