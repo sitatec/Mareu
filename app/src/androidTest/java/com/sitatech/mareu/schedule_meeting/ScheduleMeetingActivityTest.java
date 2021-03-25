@@ -74,6 +74,7 @@ public class ScheduleMeetingActivityTest {
         // Try to submit the form
         Thread.sleep(1000); // waiting for the end of animation for emulators on travis ci
         onView(withId(R.id.submit)).perform(click());
+        Thread.sleep(1000); // waiting for the end of animation for emulators on travis ci
         // Check that error indicators are displayed for pickers
         onView(withId(R.id.meeting_room_error_hint)).check(matches(isDisplayed()));
         onView(withId(R.id.date_picker_action)).check(matches(withHint(fieldsErrorMsg)));
@@ -142,6 +143,7 @@ public class ScheduleMeetingActivityTest {
         fillFormFields();
         Thread.sleep(1000); // waiting for the end of animation for emulators on travis ci
         onView(withId(R.id.submit)).perform(click());
+        Thread.sleep(1000); // waiting for the end of animation for emulators on travis ci
         onView(allOf(withId(com.google.android.material.R.id.snackbar_text), withText(message)))
                 .check(matches(isDisplayed()));
     }
@@ -152,7 +154,9 @@ public class ScheduleMeetingActivityTest {
         fillFormFields();
         Thread.sleep(1000); // waiting for the end of animation for emulators on travis ci
         onView(withId(R.id.submit)).perform(click());
+        Thread.sleep(1000); // waiting for the end of animation for emulators on travis ci
         onView(withId(R.id.submit)).perform(click());// trying to schedule existing meeting.
+        Thread.sleep(1000); // waiting for the end of animation for emulators on travis ci
         onView(allOf(withId(com.google.android.material.R.id.snackbar_text), withText(message)))
                 .check(matches(isDisplayed()));
     }
