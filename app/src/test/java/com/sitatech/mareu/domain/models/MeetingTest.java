@@ -1,5 +1,7 @@
 package com.sitatech.mareu.domain.models;
 
+import android.util.Log;
+
 import com.sitatech.mareu.domain.enums.MeetingRoomUniqueId;
 
 import static org.junit.Assert.assertEquals;
@@ -52,8 +54,8 @@ public class MeetingTest {
 
     @Test
     public void meeting_time_should_be_formatted(){
-        final String hour = String.format("%02d", meeting.getDateTime().getHour());
-        final String expectedTime = hour + "h" + meeting.getDateTime().getMinute();
+        final String expectedTime =  String.format("%02dh%02d", meeting.getDateTime().getHour() , meeting.getDateTime().getMinute());
+//        System.out.println("\n\n_____________ " + expectedTime + "_______________\n\n");
         assertEquals(meeting.getFormattedTime(), expectedTime);
     }
 
