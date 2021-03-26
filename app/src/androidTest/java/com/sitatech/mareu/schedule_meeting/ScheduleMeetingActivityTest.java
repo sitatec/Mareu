@@ -13,6 +13,7 @@ import com.sitatech.mareu.ui.schedule_meeting.ScheduleMeetingActivity;
 import com.sitatech.mareu.utils.DependencyContainer;
 
 import org.junit.After;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
@@ -49,6 +50,13 @@ public class ScheduleMeetingActivityTest {
     @BeforeClass
     public static void setUp(){
         resources = ApplicationProvider.getApplicationContext().getResources();
+    }
+
+    @Before
+    public void close_keyboard_for_low_level_apis(){
+        // on the low level apis the meeting subject field automatically get the focus and open the
+        // keyboard when the ScheduleMeetingActivity is stated
+        onView(withId(R.id.meeting_subject_edit)).perform(closeSoftKeyboard());
     }
 
     @After
