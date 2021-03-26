@@ -24,8 +24,8 @@ before_install:
 
 script:
   - chmod +x gradlew
-  - echo no | android create avd --force -n test -t $EMULATOR_API_LEVEL --abi $ANDROID_ABI --device 'Nexus 4'
-  - emulator -avd test -skin 768x1280 -no-audio -no-window &
+  - echo no | android create avd --force -n test -t $EMULATOR_API_LEVEL --abi $ANDROID_ABI --device 'Pixel 3a XL'
+  - emulator -avd test -skin 1080x2160 -no-audio -no-window &
   - android-wait-for-emulator
 #  - adb shell settings put global window_animation_scale 0 &
 #  - adb shell settings put global transition_animation_scale 0 &
