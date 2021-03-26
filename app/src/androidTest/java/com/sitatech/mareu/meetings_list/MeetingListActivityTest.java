@@ -113,12 +113,9 @@ public class MeetingListActivityTest {
         onView(withId(R.id.activity_main_meeting_recyclerview))
                 .check(withItemCount(scheduledMeetingRepository.getAll().size()));
         openContextualActionModeOverflowMenu();
-        Thread.sleep(1000);
         onView(withText(R.string.menu_action_filter_by_date_txt)).perform(click()); // click on the filter by date button (in the toolbar menu)
-        Thread.sleep(1000);
         onView(withClassName(equalTo(DatePicker.class.getName())))
                 .perform(PickerActions.setDate(currentDate.getYear(), currentDate.getMonthValue(), currentDate.getDayOfMonth()));
-        Thread.sleep(1000);
         onView(withId(android.R.id.button1)).perform(click());
         onView(withId(R.id.activity_main_meeting_recyclerview))
                 .check(withItemCount(scheduledMeetingRepository.getByDate(currentDate).size()));
@@ -131,9 +128,7 @@ public class MeetingListActivityTest {
         onView(withId(R.id.activity_main_meeting_recyclerview))
                 .check(withItemCount(scheduledMeetingRepository.getAll().size()));
         openContextualActionModeOverflowMenu();
-        Thread.sleep(1000);
         onView(withText(R.string.menu_action_filter_by_room_txt)).perform(click()); // click on the filter by room button (in the toolbar menu)
-        Thread.sleep(1000);
         onData(allOf(is(instanceOf(String.class)), is(MeetingRoomUniqueId.A.toString()))).perform(click());
         onView(withId(R.id.activity_main_meeting_recyclerview))
                 .check(withItemCount(scheduledMeetingRepository.getByRoom(MeetingRoomUniqueId.A).size()));

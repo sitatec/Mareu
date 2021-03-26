@@ -3,6 +3,7 @@ package com.sitatech.mareu.schedule_meeting;
 import android.content.res.Resources;
 
 import androidx.test.core.app.ApplicationProvider;
+import androidx.test.espresso.matcher.RootMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
@@ -18,11 +19,13 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.Espresso.pressBack;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.swipeUp;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.RootMatchers.isDialog;
 import static androidx.test.espresso.matcher.ViewMatchers.assertThat;
 import static androidx.test.espresso.matcher.ViewMatchers.hasErrorText;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -154,6 +157,7 @@ public class ScheduleMeetingActivityTest {
     }
 
     private void fillFormFields(){
+
         onView(withId(R.id.meeting_room_selector)).perform(click());
         onView(withText(MeetingRoomUniqueId.A.toString())).perform(click());
         // select the default values of the date, time and color pickers
@@ -162,11 +166,7 @@ public class ScheduleMeetingActivityTest {
         onView(withId(R.id.time_picker_action)).perform(click());
         onView(withId(android.R.id.button1)).perform(click());
         onView(withId(R.id.color_picker_action)).perform(click());
-        onView(withText(R.string.choose_color)).perform(click());
-        // select the duration
-        onView(withId(R.id.duration_picker_action)).perform(click());
-        onView(withId(R.id.minutes_picker)).perform(swipeUp());
-        onView(withId(android.R.id.button1)).perform(click());
+        onView(withText(R.string.choose_color)).inRoot(RootMatchers.isPlatformPopup()).perform(click());
         // type meeting subject
         onView(withId(R.id.meeting_subject_edit)).perform(typeText("Subject"), closeSoftKeyboard());
         // add a participant
@@ -176,6 +176,10 @@ public class ScheduleMeetingActivityTest {
         onView(withId(R.id.participant_email_edit))
                 .perform(typeText("secondParticipants"), closeSoftKeyboard());
         onView(withId(R.id.add_participant_button)).perform(click());
+        // select the duration
+        onView(withId(R.id.duration_picker_action)).perform(click());
+        onView(withId(R.id.minutes_picker)).perform(swipeUp());
+        onView(allOf(withId(android.R.id.button1), isDisplayed())).inRoot(isDialog()).perform(click());
     }
 
 }
