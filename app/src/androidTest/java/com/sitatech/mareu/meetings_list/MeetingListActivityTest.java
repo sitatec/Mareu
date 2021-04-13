@@ -55,7 +55,7 @@ import static org.hamcrest.Matchers.is;
 @RunWith(AndroidJUnit4.class)
 public class MeetingListActivityTest {
 
-    private final MeetingScheduler meetingScheduler = DependencyContainer.getMeetingScheduler();;
+    private final MeetingScheduler meetingScheduler = DependencyContainer.getMeetingScheduler();
     private final ScheduledMeetingRepository scheduledMeetingRepository = DependencyContainer.getScheduledMeetingRepository();
 
     @Rule

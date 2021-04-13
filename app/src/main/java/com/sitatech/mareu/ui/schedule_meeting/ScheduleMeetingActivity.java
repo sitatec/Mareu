@@ -17,7 +17,7 @@ import com.sitatech.mareu.domain.exceptions.TimeSlotOverlapException;
 import com.sitatech.mareu.domain.models.Meeting;
 import com.sitatech.mareu.domain.models.TimeSlot;
 import com.sitatech.mareu.domain.utils.MeetingScheduler;
-import com.sitatech.mareu.ui.schedule_meeting.fragments.pickers.DatePickerFragment;
+import com.sitatech.mareu.ui.fragments.pickers.DatePickerFragment;
 import com.sitatech.mareu.ui.schedule_meeting.fragments.pickers.DurationPickerFragment;
 import com.sitatech.mareu.ui.schedule_meeting.fragments.pickers.TimePickerFragment;
 import com.sitatech.mareu.ui.schedule_meeting.utils.MeetingRoomSpinnerHelper;
@@ -98,7 +98,9 @@ public class ScheduleMeetingActivity extends AppCompatActivity {
   }
 
   private void onMeetingDateSet(DatePicker view, int year, int month, int day) {
-    meetingDate = LocalDate.of(year, month, day);
+    meetingDate = LocalDate.of(year, month + 1, day);// Add 1 to month because
+    // the callback will be called with month value (0-11) instead of (1-12) for compatibility
+    // with Calendar.MONTH. See the `DatePickerDialog.OnDateSetListener` documentation for more info
     final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     viewBinding.datePickerAction.setText(meetingDate.format(formatter));
     viewBinding.datePickerAction.setError(null); // Remove the error hint if it was set

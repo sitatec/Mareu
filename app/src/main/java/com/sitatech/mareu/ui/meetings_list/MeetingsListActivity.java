@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -25,7 +26,7 @@ import com.sitatech.mareu.domain.repositories.ScheduledMeetingRepository;
 import com.sitatech.mareu.events.DeleteMeetingEvent;
 import com.sitatech.mareu.domain.models.Meeting;
 import com.sitatech.mareu.ui.schedule_meeting.ScheduleMeetingActivity;
-import com.sitatech.mareu.ui.schedule_meeting.fragments.pickers.DatePickerFragment;
+import com.sitatech.mareu.ui.fragments.pickers.DatePickerFragment;
 import com.sitatech.mareu.utils.DependencyContainer;
 
 import org.greenrobot.eventbus.EventBus;
@@ -38,7 +39,8 @@ import java.util.List;
 
 public class MeetingsListActivity extends AppCompatActivity {
 
-    private final ScheduledMeetingRepository scheduledMeetingRepository = DependencyContainer.getScheduledMeetingRepository();
+    private final ScheduledMeetingRepository scheduledMeetingRepository =
+            DependencyContainer.getScheduledMeetingRepository();
     private final List<Meeting> meetings = new ArrayList<>(scheduledMeetingRepository.getAll());
     private ActivityMeetingListBinding viewBinding;
     private MeetingsListAdapter meetingsListAdapter;
@@ -54,7 +56,6 @@ public class MeetingsListActivity extends AppCompatActivity {
         datePickerFragment = new DatePickerFragment(this::onMeetingFilteredByDate);
     }
 
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -68,7 +69,7 @@ public class MeetingsListActivity extends AppCompatActivity {
     private void onMeetingFilteredByDate(DatePicker view, int year, int month, int day){
         final LocalDate date = LocalDate.of(year, month + 1, day); // Add 1 to month because
         // the callback will be called with month value (0-11) instead of (1-12) for compatibility
-        // with Calendar.MONTH. See the `DatePickerDialog.OnDateSetListener` documentation for more info.
+        // with Calendar.MONTH. See the `DatePickerDialog.OnDateSetListener` documentation for more info
         meetings.clear();
         meetings.addAll(scheduledMeetingRepository.getByDate(date));
         meetingsListAdapter.notifyDataSetChanged();
@@ -100,7 +101,7 @@ public class MeetingsListActivity extends AppCompatActivity {
                 datePickerFragment.show(getSupportFragmentManager(), "filter_date_picker");
                 break;
             case R.id.reset_filter:
-                refreshMeetingList();
+                resetMeetingList();
                 break;
             case R.id.filter_by_room:
                 showRoomSelectorDialog();
@@ -124,12 +125,11 @@ public class MeetingsListActivity extends AppCompatActivity {
                 }).show();
     }
 
-    private void refreshMeetingList(){
+    private void resetMeetingList(){
         meetings.clear();
         meetings.addAll(scheduledMeetingRepository.getAll());
         meetingsListAdapter.notifyDataSetChanged();
     }
-
 
     @Subscribe
     public void onDeleteMeetingEvent(DeleteMeetingEvent event){
@@ -156,6 +156,6 @@ public class MeetingsListActivity extends AppCompatActivity {
 
     @VisibleForTesting
     public void refreshMeetingListForTesting(){
-        refreshMeetingList();
+        resetMeetingList();
     }
 }

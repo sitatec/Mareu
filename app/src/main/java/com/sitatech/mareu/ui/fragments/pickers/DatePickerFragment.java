@@ -1,4 +1,4 @@
-package com.sitatech.mareu.ui.schedule_meeting.fragments.pickers;
+package com.sitatech.mareu.ui.fragments.pickers;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;

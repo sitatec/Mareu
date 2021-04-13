@@ -55,7 +55,7 @@ public class ScheduleMeetingActivityTest {
     @Before
     public void close_keyboard_for_low_level_apis(){
         // on the low level apis the meeting subject field automatically get the focus and open the
-        // keyboard when the ScheduleMeetingActivity is stated
+        // keyboard when the ScheduleMeetingActivity is stated, so we close it.
         onView(withId(R.id.meeting_subject_edit)).perform(closeSoftKeyboard());
     }
 
