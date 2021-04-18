@@ -4,5 +4,5 @@
 <<<<<<< HEAD
 ![your-UML-diagram-name](https://raw.githubusercontent.com/sitatec/Mareu/main/app/src/uml/class_diagram_meeting_room_reservation.uml)
 =======
-![your-UML-diagram-name](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/sitatec/Mareu/main/app/src/uml/class_diagram_meeting_room_reservation.uml)
+![your-UML-diagram-name](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/sitatec/Mareu/main/app/src/uml/class_diagram_meeting_room_reservation.puml)
 >>>>>>> c496f405cba52c2666910cc218511b6f67a87c3c
