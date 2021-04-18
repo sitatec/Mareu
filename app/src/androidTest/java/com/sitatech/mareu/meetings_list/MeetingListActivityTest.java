@@ -62,7 +62,7 @@ public class MeetingListActivityTest {
     public final ActivityScenarioRule<MeetingsListActivity> activityScenarioRule = new ActivityScenarioRule<>(MeetingsListActivity.class);
 
     @After
-    public void reset(){
+    public void reset() {
         scheduledMeetingRepository.clear();
         DependencyContainer.getMeetingRoomRepository().reset();
     }
